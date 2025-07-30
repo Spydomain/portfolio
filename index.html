@@ -1,15 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bikash Sarraf | Portfolio</title>
-  <link rel="stylesheet" href="index.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bikash Sarraf | Hacker Portfolio</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="index.css" />
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  
+
 </head>
-<body>
+<body onload="startMatrix()">
+
+  <canvas id="binary-rain"></canvas>
+
+
   <nav class="navbar">
-    <div class="logo">Bikash Sarraf</div>
+    <div class="logo glitch" data-text="Bikash Sarraf">Bikash Sarraf</div>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#education">Education</a></li>
@@ -19,25 +30,38 @@
     </ul>
   </nav>
 
+
   <section class="hero" id="about">
-    <img src="photo.jpg" alt="Bikash Photo" class="profile-pic"/>
+    <img src="photo.jpg" alt="Bikash Sarraf Photo" class="profile-pic" />
     <div class="hero-text">
-      <h1>Hello, I'm Bikash Sarraf 👋</h1>
+      <h1>Hello, I'm <span class="glitch stable" data-text="Bikash Sarraf">Bikash Sarraf</span> 👋</h1>
       <p>Cybersecurity & Ethical Hacking Enthusiast</p>
       <p>📍 Kathmandu | 💻 Softwarica College | 🎓 IT & E-Commerce Student</p>
-      <p>I am passionate about learning new things in technology, especially in cybersecurity, ethical hacking, and web development. I enjoy tackling challenges and continuously developing my skills.</p>
+      <p>I am passionate about learning new things in technology, especially cybersecurity, ethical hacking, and web development. I enjoy tackling challenges and continuously developing my skills.</p>
     </div>
   </section>
+
+
+  <section class="terminal-section" aria-label="Interactive terminal">
+    <div class="terminal" id="terminal" role="region" aria-live="polite">
+      <div class="terminal-output" id="terminal-output" tabindex="0" aria-atomic="true"></div>
+      <div class="terminal-input">
+        <span class="prompt" aria-hidden="true">$</span>
+        <input id="terminal-input" type="text" autocomplete="off" spellcheck="false" autofocus aria-label="Terminal command input" />
+      </div>
+    </div>
+  </section>
+
 
   <section class="section" id="education">
     <h2>🎓 Education</h2>
     <div class="card">
       <h3>SEE - 3.10 GPA</h3>
-      <p>Shree Sharaswasti English Boarding School, Parawanipur (2078 B.S.)</p>
+      <p>Shree Sharaswasti English Boarding School, Parawanipur (2079 B.S.)</p>
     </div>
     <div class="card">
       <h3>+2 Science (Biology) - 3.08 GPA</h3>
-      <p>Xavier International College, Kalopul (2080 B.S.)</p>
+      <p>Xavier International College, Kalopul (2081 B.S.)</p>
     </div>
     <div class="card">
       <h3>Bachelor’s in IT & E-Commerce</h3>
@@ -45,11 +69,12 @@
     </div>
   </section>
 
+
   <section class="section" id="experience">
     <h2>💼 Experience</h2>
     <div class="card">
       <h3>Programming</h3>
-      <p>Basics and intermediate HTML, C, Python. Learning CSS, JavaScript, and PHP.</p>
+      <p> Intermediate HTML, C, Python, CSS, JavaScript, and PHP.</p>
     </div>
     <div class="card">
       <h3>Hacking</h3>
@@ -61,26 +86,365 @@
     </div>
   </section>
 
+ 
   <section class="section" id="projects">
     <h2>🚀 Projects</h2>
     <div class="card">
-      <h3>Keyloggger</h3>
-      <p>Recently, created a keylogger using python which is available on github can be accessed through https://github.com/spidoman/keylogger.git</p>
+      <h3>Keylogger</h3>
+      <p>Created a keylogger using Python. Available on GitHub: <a href="https://github.com/spidoman/keylogger.git" target="_blank" rel="noopener">https://github.com/spidoman/keylogger.git</a></p>
     </div>
   </section>
+
 
   <section class="section" id="contact">
     <h2>📬 Contact Me</h2>
     <div class="social-links">
-      <a href="https://www.instagram.com/bikash.sarraf.399/"><img src="instagram.jpeg" alt="Instagram" height="40"></a>
-      <a href="https://www.facebook.com/bikash.sarraf.399"><img src="facebook.png" alt="Facebook" height="40"></a>
-      <a href="https://www.linkedin.com/in/bikash-sarraf-683787320/"><img src="linkedin.png" alt="LinkedIn" height="40"></a>
-      <a href="mailto:bikashsarraf83@gmail.com"><img src="gmail.png" alt="Gmail" height="40"></a>
+      <a href="https://www.instagram.com/bikash.sarraf.399/" target="_blank" rel="noopener"><img src="instagram.jpeg" alt="Instagram" /></a>
+      <a href="https://www.facebook.com/bikash.sarraf.399" target="_blank" rel="noopener"><img src="facebook.png" alt="Facebook" /></a>
+      <a href="https://www.linkedin.com/in/bikash-sarraf-683787320/" target="_blank" rel="noopener"><img src="linkedin.png" alt="LinkedIn" /></a>
+      <a href="mailto:bikashsarraf83@gmail.com"><img src="gmail.png" alt="Gmail" /></a>
     </div>
   </section>
 
   <footer>
     <p>© 2025 Bikash Sarraf | All rights reserved</p>
   </footer>
+
+ 
+  <script>
+    function startMatrix() {
+      const canvas = document.getElementById('binary-rain');
+      const ctx = canvas.getContext('2d');
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const binary = ['0', '1'];
+      const fontSize = 16;
+      const columns = Math.floor(canvas.width / fontSize);
+
+      const drops = Array(columns).fill(1);
+
+      ctx.font = fontSize + 'px monospace';
+
+      function draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = '#39ff14';
+        for (let i = 0; i < drops.length; i++) {
+          const text = binary[Math.floor(Math.random() * binary.length)];
+          const x = i * fontSize;
+          const y = drops[i] * fontSize;
+          ctx.fillText(text, x, y);
+
+          if (y > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+      }
+
+      setInterval(draw, 40);
+
+      window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+    }
+
+    const terminalOutput = document.getElementById('terminal-output');
+    const terminalInput = document.getElementById('terminal-input');
+
+    const commands = {
+      help: `Available commands:
+ - about
+ - education
+ - experience
+ - projects
+ - contact
+ - cv
+ - clear
+ - github
+ - linkedin
+      `,
+      about: "Hi! I'm Bikash Sarraf, a cybersecurity & ethical hacking enthusiast passionate about technology and web development.",
+      education: `- SEE - 3.10 GPA from Shree Sharaswasti English Boarding School (2078 B.S.)
+- +2 Science (Biology) - 3.08 GPA from Xavier International College (2080 B.S.)
+- Currently pursuing Bachelor's in IT & E-Commerce at Softwarica College`,
+      experience: `Programming: Basics and intermediate HTML, C, Python, CSS, JS, PHP
+Hacking: Phishing, session hacking, Penetration Testing & Bug Bounty
+Languages: Fluent in English, Nepali, and more`,
+      projects: "Keylogger project in Python. GitHub: https://github.com/spidoman/keylogger.git",
+      contact: `Instagram: https://www.instagram.com/bikash.sarraf.399/
+Facebook: https://www.facebook.com/bikash.sarraf.399
+LinkedIn: https://www.linkedin.com/in/bikash-sarraf-683787320/
+Email: bikashsarraf83@gmail.com`,
+      github: "GitHub profile: https://github.com/spidoman",
+      linkedin: "LinkedIn profile: https://www.linkedin.com/in/bikash-sarraf-683787320/",
+      clear: ''
+    };
+
+    function printOutput(text) {
+      const pre = document.createElement('pre');
+      pre.textContent = text;
+      terminalOutput.appendChild(pre);
+      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    }
+
+    function preloadTerminalMessage() {
+      printOutput("Try typing 'help' to get started.");
+    }
+
+async function generateAndOpenResumePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({
+    unit: 'pt',
+    format: 'a4'
+  });
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  let y = 40;
+  const margin = 40;
+  const lineHeight = 16;
+
+  function addSectionHeader(text, yPos) {
+    doc.setFillColor(41, 82, 143); 
+    doc.rect(margin, yPos - 12, pageWidth - 2 * margin, 20, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text(text, margin + 8, yPos + 2);
+  }
+
+
+  function addText(text, x, yPos, options = {}) {
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.text(text, x, yPos, options);
+  }
+
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(18);
+  doc.setTextColor(0, 0, 0);
+  doc.text('CURRICULUM VITAE', margin, y);
+  y += 30;
+
+
+  doc.setFontSize(14);
+  doc.text('Bikash Sarraf', margin, y);
+  doc.setFontSize(11);
+  doc.setTextColor(0, 0, 255);
+  doc.text('bikashsarraf83@gmail.com', pageWidth - margin - 200, y, { maxWidth: 200 });
+  y += lineHeight;
+
+  doc.setTextColor(0, 0, 0);
+  addText('Chabahil, Kathmandu', margin, y);
+  y += 30;
+
+  addSectionHeader('PROFESSIONAL EXPERIENCE', y);
+  y += 35;
+
+  doc.setFont('helvetica', 'bold');
+  doc.text('Cybersecurity Engineer', margin, y);
+  doc.setFont('helvetica', 'italic');
+  doc.text('Kathmandu', pageWidth - margin - 120, y);
+  doc.setFont('helvetica', 'normal');
+  doc.text('SecureCode Nepal', margin, y + lineHeight);
+  doc.setFontSize(10);
+  doc.text('2020 – 2023', pageWidth - margin - 120, y + lineHeight);
+  y += 2 * lineHeight;
+
+  doc.setFontSize(11);
+  addText('• Enforced endpoint protection guidelines and kept an eye on business networks.', margin + 15, y);
+  y += lineHeight;
+  addText('• Developed automated scripts that resulted in a 45% reduction in detection response time.', margin + 15, y);
+  y += lineHeight;
+  addText('• Conducted daily testing that generated an availability of 99.9% and an 8-month breach-free record.', margin + 15, y);
+  y += 30;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(11);
+  doc.text('Security Analyst', margin, y);
+  doc.setFont('helvetica', 'italic');
+  doc.text('Kathmandu', pageWidth - margin - 120, y);
+  doc.setFont('helvetica', 'normal');
+  doc.text('RedCloud Infosec', margin, y + lineHeight);
+  doc.setFontSize(10);
+  doc.text('2024 - Present', pageWidth - margin - 120, y + lineHeight);
+  y += 2 * lineHeight;
+
+  doc.setFontSize(11);
+  addText('• Performed penetration testing, risk assessment, and vulnerability discovery.', margin + 15, y);
+  y += lineHeight;
+  addText('• Found vulnerabilities in the access control of web applications used by government agencies.', margin + 15, y);
+  y += lineHeight;
+  addText('• Developed guidelines and hands-on workshops for junior analysts.', margin + 15, y);
+  y += 50;
+
+  addSectionHeader('EDUCATION', y);
+  y += 35;
+
+  doc.setFontSize(11);
+  addText('BSc (Hons) Ethical Hacking and Cybersecurity (GPA – 3.95)', margin, y);
+  doc.setFont('helvetica', 'italic');
+  doc.text('2021–2024', pageWidth - margin - 120, y);
+  doc.setFont('helvetica', 'normal');
+  y += lineHeight;
+  addText('Softwarica College of IT and E-commerce', margin, y);
+  doc.setFont('helvetica', 'italic');
+  doc.text('Kathmandu', pageWidth - margin - 120, y);
+  y += 30;
+
+  addSectionHeader('CERTIFICATION', y);
+  y += 35;
+
+  const certifications = [
+    '• Offensive Security Certified Professional (OSCP)',
+    '• GIAC Web Application Penetration Tester (GWAPT)',
+    '• Cisco CyberOps Associate',
+    '• CompTIA Pentest+',
+    '• Blue Team Level 1 (BTL1)'
+  ];
+  certifications.forEach(line => {
+    addText(line, margin, y);
+    y += lineHeight;
+  });
+  y += 20;
+
+  addSectionHeader('SKILLS', y);
+  y += 35;
+
+  const skills = [
+    '• A comprehensive usage of secure code, access control, and session management',
+    '• Proficient about running vulnerability testing with programs like as Nikto, Burp Suite, Nmap, and sqlmap',
+    '• Competent with SIEM tools and device tracking technologies',
+    '• True knowledge of the MITRE ATT&CK and OWASP Top 10 systems',
+    '• Aware of ways for network surveillance, directory monitoring, and password abuse'
+  ];
+  skills.forEach(line => {
+    addText(line, margin, y);
+    y += lineHeight;
+  });
+  y += 20;
+
+  addSectionHeader('LANGUAGES', y);
+  y += 35;
+
+  addText('Python, JavaScript, Go, Shell, PHP', margin, y);
+  y += 50;
+doc.text('Page 1 / 2', pageWidth - margin - 60, doc.internal.pageSize.getHeight() - 30);
+
+  // Continue on next page if needed
+  if (y > doc.internal.pageSize.getHeight() - 120) {
+    doc.addPage();
+    y = margin;
+  }
+
+  addSectionHeader('PROJECTS', y);
+  y += 35;
+
+  const projects = [
+    '1. Role-Based Access Validation Engine',
+    '   • Developed a testing tool to analyze role misassignments in large-scale web apps.',
+    '   • Included session token analysis and endpoint access matching.',
+    '',
+    '2. CTF Challenge – Access Control Exploit Lab',
+    '   • In a Capture the Flag scenario, an access control bypass was simulated.',
+    '   • Exploited hidden admin routes and deleted users using the Curl and Burp Suite.',
+    '',
+    '3. JWT Authorization Bypass Analyzer',
+    '   • Developed a Python privilege escalation testing tool that can replay, alter, and decode JWT tokens.',
+    '   • Tested against 6 different web apps with insecure token validation.'
+  ];
+  projects.forEach(line => {
+    addText(line, margin, y);
+    y += lineHeight;
+  });
+  y += 40;
+
+
+  const projectsCont = [
+    '4. XSS and Directory Traversal Scanner',
+    '   • Created a tool to detect input-based attacks using common payloads.',
+    '   • Incorporated a rate limiter automation for live reporting.',
+    '',
+    '5. Encrypted Backup System for Enterprise Logs',
+    '   • Designed a file logging system using AES encryption for audit records.',
+    '   • Integrated with cron jobs and SIEM alerts.',
+    '',
+    '6. Firewall Rule Optimizer',
+    '   • Developed a shell script to parse and clean iptables rules for performance boost.',
+    '   • Reduced redundant checks and improved throughput by 15%.'
+  ];
+  projectsCont.forEach(line => {
+    addText(line, margin, y);
+    y += lineHeight;
+  });
+  y += 50;
+
+  addSectionHeader('REFERENCES', y);
+  y += 35;
+
+  addText('Mr. abc', margin, y);
+  y += lineHeight;
+  addText('Cybersecurity Instructor', margin, y);
+  y += lineHeight;
+  addText('Softwarica College of IT and E-commerce', margin, y);
+  y += lineHeight;
+  addText('Address: Gokarneshwor-11, Lalitpur', margin, y);
+  y += lineHeight;
+  addText('Phone no: +977 9800013123', margin, y);
+  y += lineHeight;
+  addText('Email: abc00319@softwarica.edu.np', margin, y);
+
+  doc.setFontSize(10);
+  doc.setTextColor(100);
+  doc.text('Page 2 / 2', pageWidth - margin - 60, doc.internal.pageSize.getHeight() - 30);
+
+  // Save and open
+  const pdfBlob = doc.output('blob');
+  const url = URL.createObjectURL(pdfBlob);
+  window.open(url);
+
+  doc.save('Bikash_Sarraf_Resume.pdf');
+}
+
+
+    // Terminal input handler
+    terminalInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const input = terminalInput.value.trim().toLowerCase();
+        if (input === '') return;
+
+        printOutput('$ ' + input);
+
+        if (input === 'clear') {
+          terminalOutput.innerHTML = '';
+          terminalInput.value = '';
+          return;
+        }
+
+        if (input === 'cv') {
+          printOutput("Generating PDF cv...");
+          generateAndOpenResumePDF();
+          terminalInput.value = '';
+          return;
+        }
+
+        if (commands[input]) {
+          printOutput(commands[input]);
+        } else {
+          printOutput(`Command not found: ${input}. Try 'help' for available commands.`);
+        }
+        terminalInput.value = '';
+      }
+    });
+
+    preloadTerminalMessage();
+  </script>
 </body>
 </html>
