@@ -347,3 +347,84 @@ footer {
 .terminal-output::-webkit-scrollbar-track {
   background-color: transparent;
 }
+
+.contact-form {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 1px solid #0f0;
+  box-shadow: 0 0 15px #0f0;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.contact-form label {
+  display: block;
+  margin-bottom: 15px;
+  color: #0f0;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 10px;
+  background: black;
+  border: 1px solid #0f0;
+  color: #0f0;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: #00ffcc;
+  box-shadow: 0 0 10px #00ffcc;
+}
+
+.glitch-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: black;
+  color: #0f0;
+  border: 1px solid #0f0;
+  cursor: pointer;
+  font-size: 1.1em;
+  position: relative;
+  text-transform: uppercase;
+}
+
+.glitch-btn::before,
+.glitch-btn::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  background: black;
+  color: #0f0;
+}
+
+.glitch-btn::before {
+  animation: glitchTop 2s infinite linear;
+  top: -2px;
+}
+
+.glitch-btn::after {
+  animation: glitchBottom 2s infinite linear;
+  top: 2px;
+}
+
+.glitch-btn:hover {
+  border-color: #00ffcc;
+  color: #00ffcc;
+}
+
+@keyframes glitchTop {
+  0%, 100% { clip: rect(0, 900px, 0, 0); }
+  10% { clip: rect(0, 900px, 10px, 0); }
+}
+
+@keyframes glitchBottom {
+  0%, 100% { clip: rect(0, 900px, 0, 0); }
+  10% { clip: rect(10px, 900px, 20px, 0); }
+}
