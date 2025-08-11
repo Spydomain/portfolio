@@ -16,11 +16,16 @@
 </head>
 <body onload="startMatrix()">
 
+ 
   <canvas id="binary-rain"></canvas>
 
-
-  <nav class="navbar">
-    <div class="logo glitch" data-text="Bikash Sarraf">Bikash Sarraf</div>
+  <nav class="navbar" >
+    <div class="logo glitch" id="hamburger" data-text="Bikash Sarraf">Bikash Sarraf</div>
+    <div class="hamburger" id="menu-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#education">Education</a></li>
@@ -32,6 +37,15 @@
     </ul>
   </nav>
 
+  <script>
+  const hamburger = document.getElementById('menu-toggle');
+  const navMenu = document.querySelector('.nav-links');
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navMenu.classList.toggle('show');
+  });
+</script>
 
   <section class="hero" id="about">
     <img src="photo.jpg" alt="Bikash Sarraf Photo" class="profile-pic" />
@@ -97,7 +111,7 @@
       <br>
       <h3>Bike Rental Nepal</h3>
       <p>Created a Bike Rental Nepal  using Node.js+React.js. Available on GitHub: <a href="https://github.com/Spydomain/front.git"  target="_blank" rel="noopener">https://github.com/Spydomain/front.git</a>
-      <a href="https://github.com/Spydomain/backend.git" target="_blank" rel="noopener">https://github.com/Spydomain/backend.git</a></p>
+      <a href="https://github.com/Spydomain/backend.git" target="_blank" rel="noopener">Bike Rental Nepal Backend</a></p>
       <br>
       <h3>CVE-2023-22809-automated-python-exploits</h3>
       <p>Created a CVE-2023-22809-automated-python-exploits using Python. Available on GitHub: <a href="https://github.com/Spydomain/CVE-2023-22809-automated-python-exploits.git" target="_blank" rel="noopener">https://github.com/Spydomain/CVE-2023-22809-automated-python-exploits.git</a></p>
@@ -175,6 +189,7 @@
       <a href="https://www.facebook.com/bikash.sarraf.399" target="_blank" rel="noopener"><img src="facebook.png" alt="Facebook" /></a>
       <a href="https://www.linkedin.com/in/bikash-sarraf-683787320/" target="_blank" rel="noopener"><img src="linkedin.png" alt="LinkedIn" /></a>
       <a href="https://tryhackme.com/p/bikashsarraf" target="_blank" rel="noopener"><img src="tryhackme.png" alt="TryHackMe" /></a>
+      <a href="https://www.github.com/Spydomain" target="_blank" rel="noopener"><img src="github.png" alt="GitHub" /></a>
     </div>
   </section>
 
@@ -256,7 +271,7 @@ Languages: Fluent in English, Nepali, and more`,
 Facebook: https://www.facebook.com/bikash.sarraf.399
 LinkedIn: https://www.linkedin.com/in/bikash-sarraf-683787320/
 Email: bikashsarraf83@gmail.com`,
-      github: "GitHub profile: https://github.com/spidoman",
+      github: "GitHub profile: https://github.com/Spydomain",
       linkedin: "LinkedIn profile: https://www.linkedin.com/in/bikash-sarraf-683787320/",
       certifications: `- TryHackMe presecurity 
 - TryHackMe CyberSecurity 101`,
