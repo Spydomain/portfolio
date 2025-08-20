@@ -14,6 +14,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
 canvas#binary-rain {
   position: fixed;
   top: 0;
@@ -51,7 +56,7 @@ canvas#binary-rain {
   left: 0;
   width: 100%;
   color: #00ff99;
-  background: black;
+  background: transparent;
   user-select: none;
   mix-blend-mode: screen;
 }
@@ -120,8 +125,8 @@ canvas#binary-rain {
 }
 
 .profile-pic {
-  width: 180px;
-  height:180px;
+  width: clamp(120px, 28vw, 180px);
+  height: clamp(120px, 28vw, 180px);
   border-radius: 50%;
   border: 3px solid #00ff99;
   box-shadow:
@@ -133,22 +138,15 @@ canvas#binary-rain {
 }
 
 .hero-text h1 {
-  font-size: 3.8rem;
+  font-size: clamp(2rem, 6vw, 3.8rem);
   font-weight: 900;
   color: #00ff99;
-  /* Soften glow */
-  text-shadow:
-    0 0 8px #00ff99,
-    0 0 16px #00fff2;
   margin-bottom: 15px;
 }
 
 .hero-text h1 .glitch.stable {
   cursor: default;
   color: #00fff2;
-  text-shadow:
-    0 0 10px #00fff2,
-    0 0 18px #00fff2;
 }
 
 .hero-text p {
@@ -164,8 +162,8 @@ canvas#binary-rain {
   list-style: none;
   padding: 0;
   margin: 8px auto 14px;
-  display: inline-block;      
-  text-align: left;           
+  display: inline-block;
+  text-align: left;
   max-width: 680px;
 }
 .hero-text .about-list li {
@@ -181,7 +179,7 @@ canvas#binary-rain {
   justify-content: center;
 }
 .hero-text .about-list .icon {
-  width: 1.4em;               
+  width: 1.4em;
   text-align: center;
   filter: drop-shadow(0 0 6px #00ff99);
 }
@@ -202,7 +200,7 @@ canvas#binary-rain {
 }
 
 .section h2 {
-  font-size: 2.6rem;
+  font-size: clamp(1.6rem, 4.5vw, 2.6rem);
   font-weight: 900;
   color: #00fff2;
   margin-bottom: 36px;
@@ -510,7 +508,7 @@ footer {
   left: 0;
   width: 100%;
   overflow: hidden;
-  background: black;
+  background: transparent;
   color: #0f0;
 }
 
@@ -604,7 +602,36 @@ footer {
 
   .logo {
     margin-left: 56px;
+    font-size: 2rem;
   }
+}
+
+@media (max-width: 992px) {
+  .hero { margin: 70px auto 100px; }
+  .section { padding: 50px 24px; }
+  .card { padding: 26px 28px; }
+}
+
+@media (max-width: 768px) {
+  .hero { margin: 60px auto 90px; padding: 0 16px; }
+  .hero-text p { font-size: 1.15rem; }
+  .nav-links a { font-size: 1rem; }
+  .social-links { gap: 20px; }
+  .social-links a img { width: 44px; height: 44px; }
+}
+
+@media (max-width: 576px) {
+  .navbar { padding: 14px 16px; }
+  .section { padding: 42px 18px; }
+  .card { margin: 20px auto 36px; }
+  .hero-text p { font-size: 1.05rem; }
+}
+
+@media (max-width: 400px) {
+  .hero { padding: 0 12px; }
+  .section { padding: 36px 14px; }
+  .section h2 { margin-bottom: 28px; }
+  .social-links a img { width: 38px; height: 38px; }
 }
 @media (max-width: 768px) {
   .projects .project-links {
