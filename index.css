@@ -402,6 +402,8 @@ footer {
 
 #terminal-input {
   flex-grow: 1;
+  flex: 1 1 auto;
+  min-width: 0; 
   background: transparent;
   border: none;
   border-bottom: 3px solid #00ff99;
@@ -449,6 +451,46 @@ footer {
 .terminal-output::-webkit-scrollbar-thumb {
   background-color: #00ff9966;
   border-radius: 9px;
+}
+
+
+@media (max-width: 480px) {
+  .terminal-section {
+    padding: 16px;
+    margin: 24px auto 60px;
+  }
+  .terminal-window {
+    border-width: 1px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px #00ff99, inset 0 0 12px #00ff99;
+  }
+  .terminal-header {
+    padding: 6px 8px;
+  }
+  .traffic.light {
+    width: 10px;
+    height: 10px;
+  }
+  .terminal-title {
+    font-size: 0.9rem;
+  }
+  .terminal {
+    height: 260px;
+    padding: 12px;
+    font-size: 0.95rem;
+    box-shadow: inset 0 0 14px #00ff99;
+  }
+  .terminal-input {
+    gap: 8px;
+  }
+  .prompt {
+    font-size: 1.1rem;
+  }
+  #terminal-input {
+    font-size: 1rem;
+    padding: 6px 10px;
+    border-bottom-width: 2px;
+  }
 }
 
 .terminal::-webkit-scrollbar-track,
@@ -605,13 +647,14 @@ footer {
     font-size: 2rem;
   }
 }
-
+/* Large tablets and small laptops */
 @media (max-width: 992px) {
   .hero { margin: 70px auto 100px; }
   .section { padding: 50px 24px; }
   .card { padding: 26px 28px; }
 }
 
+/* Tablets */
 @media (max-width: 768px) {
   .hero { margin: 60px auto 90px; padding: 0 16px; }
   .hero-text p { font-size: 1.15rem; }
@@ -620,6 +663,7 @@ footer {
   .social-links a img { width: 44px; height: 44px; }
 }
 
+/* Phones */
 @media (max-width: 576px) {
   .navbar { padding: 14px 16px; }
   .section { padding: 42px 18px; }
@@ -627,6 +671,7 @@ footer {
   .hero-text p { font-size: 1.05rem; }
 }
 
+/* Small phones */
 @media (max-width: 400px) {
   .hero { padding: 0 12px; }
   .section { padding: 36px 14px; }
