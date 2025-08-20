@@ -2,7 +2,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /*cursor: url('cursor.png'), auto; */
 }
 
 body {
@@ -137,10 +136,10 @@ canvas#binary-rain {
   font-size: 3.8rem;
   font-weight: 900;
   color: #00ff99;
+  /* Soften glow */
   text-shadow:
-    0 0 15px #00ff99,
-    0 0 30px #00fff2,
-    0 0 40px #00fff2;
+    0 0 8px #00ff99,
+    0 0 16px #00fff2;
   margin-bottom: 15px;
 }
 
@@ -148,9 +147,8 @@ canvas#binary-rain {
   cursor: default;
   color: #00fff2;
   text-shadow:
-    0 0 30px #00fff2,
-    0 0 40px #00fff2,
-    0 0 60px #00fff2;
+    0 0 10px #00fff2,
+    0 0 18px #00fff2;
 }
 
 .hero-text p {
@@ -192,7 +190,7 @@ canvas#binary-rain {
   color: #00ff99;
   transition: box-shadow 0.3s ease;
   user-select: text;
-  overflow-wrap: break-word;   /* Fix long text overflow */
+  overflow-wrap: break-word;
   word-break: break-word;
 }
 
@@ -215,7 +213,7 @@ canvas#binary-rain {
   font-weight: 700;
   transition: color 0.3s ease, text-shadow 0.3s ease;
   user-select: text;
-  overflow-wrap: break-word;   /* Fix long links overflow */
+  overflow-wrap: break-word;
   word-break: break-word;
 }
 
@@ -274,15 +272,66 @@ footer {
   user-select: text;
 }
 
+.terminal-window {
+  background: #001000;
+  border: 2px solid #00ff99;
+  border-radius: 14px;
+  box-shadow: 0 0 24px #00ff99, inset 0 0 18px #00ff99;
+}
+
+.terminal-window:hover {
+  border-color: #00fff2;
+  box-shadow: 0 0 32px #00fff2, inset 0 0 22px #00fff2;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+#terminal-input:focus {
+  border-bottom-color: #00fff2;
+}
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, #0b0b0b 0%, #050505 100%);
+  border-bottom: 2px solid #00ff99;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  position: relative;
+}
+
+.traffic.light {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px rgba(0,0,0,0.6);
+}
+.traffic.light.red { background: #ff5f56; box-shadow: 0 0 8px #ff5f56; }
+.traffic.light.yellow { background: #ffbd2e; box-shadow: 0 0 8px #ffbd2e; }
+.traffic.light.green { background: #27c93f; box-shadow: 0 0 8px #27c93f; }
+
+.terminal-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  color: #00fff2;
+  font-weight: 700;
+  pointer-events: none;
+  letter-spacing: 0.04em;
+}
+
 .terminal {
   display: flex;
   flex-direction: column;
-  height: 370px;
+  height: 480px;
   background-color: #001a00;
   border-radius: 14px;
   padding: 25px 30px;
   box-shadow: inset 0 0 22px #00ff99;
   overflow-y: auto;
+  overflow-x: hidden;
   color: #00ff99;
   font-size: 1.15rem;
   line-height: 1.6;
@@ -292,11 +341,18 @@ footer {
 .terminal-output {
   flex-grow: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   white-space: pre-wrap;
   word-break: break-word;
   padding-right: 12px;
   user-select: text;
   caret-color: transparent;
+}
+
+.terminal-output pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0 0 6px 0;
 }
 
 .terminal-input {
@@ -329,6 +385,28 @@ footer {
 
 #terminal-input::placeholder {
   color: #00ff9977;
+}
+
+@media (max-width: 768px) {
+  .terminal-section {
+    padding: 20px;
+    margin: 24px auto 70px;
+  }
+  .terminal-window {
+    border-width: 1.5px;
+    border-radius: 12px;
+  }
+  .terminal-header {
+    padding: 8px 10px;
+  }
+  .terminal {
+    height: 360px;
+    padding: 18px;
+    font-size: 1rem;
+  }
+  #terminal-input {
+    font-size: 1.05rem;
+  }
 }
 
 .terminal::-webkit-scrollbar,
@@ -428,12 +506,9 @@ footer {
   10% { clip: rect(10px, 900px, 20px, 0); }
 }
 
-/* Hamburger menu styles */
 .hamburger {
   display: none;
 }
-
-/* Responsive Navbar & Hamburger */
 @media (max-width: 1024px) {
   .navbar {
     position: relative;
@@ -462,7 +537,6 @@ footer {
     margin-right: 0;
   }
 
-  /* Hamburger icon fix */
   .hamburger {
     display: flex;
     flex-direction: column;
@@ -473,15 +547,15 @@ footer {
     width: 38px;
     height: 38px;
     position: absolute;
-    top: 18px; /* move up to avoid logo overlap */
+    top: 18px;
     left: 18px;
     z-index: 1100;
   }
   .hamburger span {
     display: block;
-    height: 6px; /* thinner bars */
+    height: 6px;
     width: 32px;
-    background: #00ff99; /* bright green for visibility */
+    background: #00ff99;
     border-radius: 4px;
     transition: all 0.3s;
   }
@@ -495,13 +569,10 @@ footer {
     transform: translateY(-10px) rotate(-45deg);
   }
 
-  /* Add space between hamburger and logo */
   .logo {
     margin-left: 56px;
   }
 }
-
-/* Mobile-specific project links fix */
 @media (max-width: 768px) {
   .projects .project-links {
     display: flex;
