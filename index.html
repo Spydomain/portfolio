@@ -59,11 +59,19 @@
 
 
   <section class="terminal-section" aria-label="Interactive terminal">
-    <div class="terminal" id="terminal" role="region" aria-live="polite">
-      <div class="terminal-output" id="terminal-output" tabindex="0" aria-atomic="true"></div>
-      <div class="terminal-input">
-        <span class="prompt" aria-hidden="true">$</span>
-        <input id="terminal-input" type="text" autocomplete="off" spellcheck="false" autofocus aria-label="Terminal command input" />
+    <div class="terminal-window" role="region" aria-live="polite">
+      <div class="terminal-header" aria-hidden="true">
+        <span class="traffic light red"></span>
+        <span class="traffic light yellow"></span>
+        <span class="traffic light green"></span>
+        <span class="terminal-title">root@bikash#</span>
+      </div>
+      <div class="terminal" id="terminal">
+        <div class="terminal-output" id="terminal-output" tabindex="0" aria-atomic="true"></div>
+        <div class="terminal-input">
+          <span class="prompt" aria-hidden="true">root@bikash#</span>
+          <input id="terminal-input" type="text" autocomplete="off" spellcheck="false" autofocus aria-label="Terminal command input" />
+        </div>
       </div>
     </div>
   </section>
@@ -90,7 +98,7 @@
     <h2>🛠 Skills</h2>
     <div class="card">
       <h3>Programming Languages</h3>
-      <p> Intermediate HTML, C, Python, CSS, JavaScript, bash scripting and PHP.</p>
+      <p> Intermediate HTML, C, Python, CSS, Node.js, React.js, Mysql, bash scripting and PHP.</p>
     </div>
     <div class="card">
       <h3>Hacking Skills</h3>
@@ -172,7 +180,7 @@
     <script>
   const form = document.querySelector('.contact-form');
   form.addEventListener('submit', function (e) {
-    e.preventDefault(); // Prevent default form submit
+    e.preventDefault();
     fetch(form.action, {
       method: form.method,
       body: new FormData(form),
@@ -182,8 +190,8 @@
     }).then(response => {
       if (response.ok) {
         alert('Message sent successfully!');
-        form.reset(); // Clear the form fields
-        window.location.reload(); // Reload the page
+        form.reset();
+        window.location.reload();
       } else {
         alert('Oops! There was a problem submitting your form');
       }
@@ -256,48 +264,63 @@
 
     const commands = {
       help: `Available commands:
- - about
- - education
- - experience
- - projects
- - contact
- - cv
- - clear
- - github
- - linkedin
- - certifications
+- about
+- whoami
+- education
+- experience
+- projects
+- contact
+- cv
+- clear
+- github
+- linkedin
+- certifications
       `,
-      about: "Hi! I'm Bikash Sarraf, a cybersecurity & ethical hacking enthusiast passionate about technology and web development.",
-      education: `- SEE - 3.10 GPA from Shree Sharaswasti English Boarding School (2078 B.S.)
-- +2 Science (Biology) - 3.08 GPA from Xavier International College (2080 B.S.)
-- Currently pursuing Bachelor's in IT & E-Commerce at Softwarica College`,
-      experience: `Programming: Basics and intermediate HTML, C, Python, CSS, JS, PHP
-Hacking: Phishing, session hacking, Penetration Testing & Bug Bounty
-Languages: Fluent in English, Nepali, and more`,
-      projects: `- Keylogger project in Python. 
-- Bike Rental Nepal project in Node.js+React.js. 
-- CVE-2023-22809-automated-python-exploits in python. 
-- ClipboardAI project in shell. `,
-      contact: `Instagram: https://www.instagram.com/bikash.sarraf.399/
-Facebook: https://www.facebook.com/bikash.sarraf.399
-LinkedIn: https://www.linkedin.com/in/bikash-sarraf-683787320/
-Email: bikashsarraf83@gmail.com`,
+      about: "Cybersecurity & Ethical Hacking Enthusiast\nKathmandu | Softwarica College | IT & E-Commerce Student",
+      whoami: "Hi, I'm Bikash Sarraf — a cybersecurity & ethical hacking enthusiast.\nBased in Kathmandu, studying IT & E‑Commerce at Softwarica.\nInterests: web security, pentesting, bug bounty, OSINT, and building tools with Python/Node/React.",
+      education: `- SEE - 3.10 GPA\n  Shree Sharaswasti English Boarding School, Parawanipur (2023 A.D.)\n- +2 Science (Biology) - 3.08 GPA\n  Xavier International College, Kalopul (2025 A.D.)\n- Bachelor’s in Cyber Security and Ethical Hacking\n  Currently pursuing at Softwarica College`,
+      experience: `Currently no work experience`,
+      projects: `- Keylogger (Python)\n- Bike Rental Nepal (Node.js + React.js)\n- CVE-2023-22809 automated exploits (Python)\n- ClipboardAI (Bash) `,
+      contact: `Instagram: https://www.instagram.com/bikash.sarraf.399/\nFacebook: https://www.facebook.com/bikash.sarraf.399\nLinkedIn: https://www.linkedin.com/in/bikash-sarraf-683787320/\nEmail: bikashsarraf83@gmail.com`,
       github: "GitHub profile: https://github.com/Spydomain",
       linkedin: "LinkedIn profile: https://www.linkedin.com/in/bikash-sarraf-683787320/",
-      certifications: `- TryHackMe presecurity 
-- TryHackMe CyberSecurity 101`,
+      certifications: `- TryHackMe Presecurity Certified\n- TryHackMe Cyber Security 101 Certified\n- TryHackMe Advent of Cyber 2022 Certified`,
       clear: ''
     };
 
-    function printOutput(text) {
+    function printOutputInstant(text) {
       const pre = document.createElement('pre');
       pre.textContent = text;
       terminalOutput.appendChild(pre);
       terminalOutput.scrollTop = terminalOutput.scrollHeight;
     }
 
+    let typingQueue = Promise.resolve();
+    function typeOutput(text, speed = 15) {
+      return new Promise(resolve => {
+        const pre = document.createElement('pre');
+        terminalOutput.appendChild(pre);
+        let i = 0;
+        (function step() {
+          pre.textContent = text.slice(0, i);
+          terminalOutput.scrollTop = terminalOutput.scrollHeight;
+          if (i < text.length) {
+            const delay = text[i] === '\n' ? speed * 2 : speed;
+            i++;
+            setTimeout(step, delay);
+          } else {
+            resolve();
+          }
+        })();
+      });
+    }
+    function enqueueType(text) {
+      typingQueue = typingQueue.then(() => typeOutput(text));
+      return typingQueue;
+    }
+
     function preloadTerminalMessage() {
-      printOutput("Try typing 'help' to get started.");
+      enqueueType("Try typing 'help' to get started.");
     }
 
 async function generateAndOpenResumePDF() {
@@ -349,68 +372,40 @@ async function generateAndOpenResumePDF() {
   y += 30;
 
   addSectionHeader('PROFESSIONAL EXPERIENCE', y);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(11);
+  doc.setTextColor(0, 0, 0);
   y += 35;
-
-  doc.setFont('helvetica', 'bold');
-  doc.text('Cybersecurity Engineer', margin, y);
-  doc.setFont('helvetica', 'italic');
-  doc.text('Kathmandu', pageWidth - margin - 120, y);
-  doc.setFont('helvetica', 'normal');
-  doc.text('SecureCode Nepal', margin, y + lineHeight);
-  doc.setFontSize(10);
-  doc.text('2020 – 2023', pageWidth - margin - 120, y + lineHeight);
-  y += 2 * lineHeight;
-
-  doc.setFontSize(11);
-  addText('• Enforced endpoint protection guidelines and kept an eye on business networks.', margin + 15, y);
-  y += lineHeight;
-  addText('• Developed automated scripts that resulted in a 45% reduction in detection response time.', margin + 15, y);
-  y += lineHeight;
-  addText('• Conducted daily testing that generated an availability of 99.9% and an 8-month breach-free record.', margin + 15, y);
-  y += 30;
-
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(11);
-  doc.text('Security Analyst', margin, y);
-  doc.setFont('helvetica', 'italic');
-  doc.text('Kathmandu', pageWidth - margin - 120, y);
-  doc.setFont('helvetica', 'normal');
-  doc.text('RedCloud Infosec', margin, y + lineHeight);
-  doc.setFontSize(10);
-  doc.text('2024 - Present', pageWidth - margin - 120, y + lineHeight);
-  y += 2 * lineHeight;
-
-  doc.setFontSize(11);
-  addText('• Performed penetration testing, risk assessment, and vulnerability discovery.', margin + 15, y);
-  y += lineHeight;
-  addText('• Found vulnerabilities in the access control of web applications used by government agencies.', margin + 15, y);
-  y += lineHeight;
-  addText('• Developed guidelines and hands-on workshops for junior analysts.', margin + 15, y);
-  y += 50;
+  doc.text('Currently no professional experience', margin, y);
+  y += 40;
 
   addSectionHeader('EDUCATION', y);
   y += 35;
 
   doc.setFontSize(11);
-  addText('BSc (Hons) Ethical Hacking and Cybersecurity (GPA – 3.95)', margin, y);
-  doc.setFont('helvetica', 'italic');
-  doc.text('2021–2024', pageWidth - margin - 120, y);
-  doc.setFont('helvetica', 'normal');
+  addText('SEE - 3.10 GPA', margin, y);
+  doc.setFont('helvetica', 'italic'); doc.text('2023 A.D.', pageWidth - margin - 120, y); doc.setFont('helvetica', 'normal');
   y += lineHeight;
-  addText('Softwarica College of IT and E-commerce', margin, y);
-  doc.setFont('helvetica', 'italic');
-  doc.text('Kathmandu', pageWidth - margin - 120, y);
+  addText('Shree Sharaswasti English Boarding School, Parawanipur', margin, y);
+  y += 20;
+  addText('+2 Science (Biology) - 3.08 GPA', margin, y);
+  doc.setFont('helvetica', 'italic'); doc.text('2025 A.D.', pageWidth - margin - 120, y); doc.setFont('helvetica', 'normal');
+  y += lineHeight;
+  addText('Xavier International College, Kalopul', margin, y);
+  y += 20;
+  addText('Bachelor’s in Cyber Security and Ethical Hacking', margin, y);
+  doc.setFont('helvetica', 'italic'); doc.text('Pursuing', pageWidth - margin - 120, y); doc.setFont('helvetica', 'normal');
+  y += lineHeight;
+  addText('Softwarica College of IT and E-Commerce, Gyaneshwor, Kathmandu', margin, y);
   y += 30;
 
   addSectionHeader('CERTIFICATION', y);
   y += 35;
 
   const certifications = [
-    '• Offensive Security Certified Professional (OSCP)',
-    '• GIAC Web Application Penetration Tester (GWAPT)',
-    '• Cisco CyberOps Associate',
-    '• CompTIA Pentest+',
-    '• Blue Team Level 1 (BTL1)'
+    '• TryHackMe Presecurity Certified',
+    '• TryHackMe Cyber Security 101 Certified',
+    '• TryHackMe Advent of Cyber 2022 Certified'
   ];
   certifications.forEach(line => {
     addText(line, margin, y);
@@ -422,11 +417,9 @@ async function generateAndOpenResumePDF() {
   y += 35;
 
   const skills = [
-    '• A comprehensive usage of secure code, access control, and session management',
-    '• Proficient about running vulnerability testing with programs like as Nikto, Burp Suite, Nmap, and sqlmap',
-    '• Competent with SIEM tools and device tracking technologies',
-    '• True knowledge of the MITRE ATT&CK and OWASP Top 10 systems',
-    '• Aware of ways for network surveillance, directory monitoring, and password abuse'
+    '• Programming: Intermediate HTML, C, Python, CSS, Node.js, React.js, MySQL, Bash, PHP',
+    '• Hacking: Practicing phishing, OSINT, session hacking, learning Pentesting & Bug Bounty',
+    '• Languages: English, Nepali, and more'
   ];
   skills.forEach(line => {
     addText(line, margin, y);
@@ -434,14 +427,8 @@ async function generateAndOpenResumePDF() {
   });
   y += 20;
 
-  addSectionHeader('LANGUAGES', y);
-  y += 35;
+  y += 20;
 
-  addText('Python, JavaScript, Go, Shell, PHP', margin, y);
-  y += 50;
-doc.text('Page 1 / 2', pageWidth - margin - 60, doc.internal.pageSize.getHeight() - 30);
-
-  // Continue on next page if needed
   if (y > doc.internal.pageSize.getHeight() - 120) {
     doc.addPage();
     y = margin;
@@ -449,19 +436,18 @@ doc.text('Page 1 / 2', pageWidth - margin - 60, doc.internal.pageSize.getHeight(
 
   addSectionHeader('PROJECTS', y);
   y += 35;
-
   const projects = [
-    '1. Role-Based Access Validation Engine',
-    '   • Developed a testing tool to analyze role misassignments in large-scale web apps.',
-    '   • Included session token analysis and endpoint access matching.',
+    '1. Keylogger (Python)',
+    '   • Created a keylogger using Python. GitHub: https://github.com/Spydomain/keylogger',
     '',
-    '2. CTF Challenge – Access Control Exploit Lab',
-    '   • In a Capture the Flag scenario, an access control bypass was simulated.',
-    '   • Exploited hidden admin routes and deleted users using the Curl and Burp Suite.',
+    '2. Bike Rental Nepal (Node.js + React.js)',
+    '   • Frontend: https://github.com/Spydomain/front  |  Backend: https://github.com/Spydomain/backend',
     '',
-    '3. JWT Authorization Bypass Analyzer',
-    '   • Developed a Python privilege escalation testing tool that can replay, alter, and decode JWT tokens.',
-    '   • Tested against 6 different web apps with insecure token validation.'
+    '3. CVE-2023-22809 Automated Exploits (Python)',
+    '   • https://github.com/Spydomain/CVE-2023-22809-automated-python-exploits',
+    '',
+    '4. ClipboardAI (Bash Script)',
+    '   • https://github.com/Spydomain/ClipboardAI'
   ];
   projects.forEach(line => {
     addText(line, margin, y);
@@ -470,45 +456,43 @@ doc.text('Page 1 / 2', pageWidth - margin - 60, doc.internal.pageSize.getHeight(
   y += 40;
 
 
-  const projectsCont = [
-    '4. XSS and Directory Traversal Scanner',
-    '   • Created a tool to detect input-based attacks using common payloads.',
-    '   • Incorporated a rate limiter automation for live reporting.',
-    '',
-    '5. Encrypted Backup System for Enterprise Logs',
-    '   • Designed a file logging system using AES encryption for audit records.',
-    '   • Integrated with cron jobs and SIEM alerts.',
-    '',
-    '6. Firewall Rule Optimizer',
-    '   • Developed a shell script to parse and clean iptables rules for performance boost.',
-    '   • Reduced redundant checks and improved throughput by 15%.'
-  ];
+  const projectsCont = [];
   projectsCont.forEach(line => {
     addText(line, margin, y);
     y += lineHeight;
   });
   y += 50;
 
+  if (y > doc.internal.pageSize.getHeight() - 120) {
+    doc.addPage();
+    y = margin;
+  }
+
   addSectionHeader('REFERENCES', y);
   y += 35;
+  const references = [
+    'Academic Reference: Softwarica College',
+    'Professional Reference: '
+  ];
 
-  addText('Mr. abc', margin, y);
-  y += lineHeight;
-  addText('Cybersecurity Instructor', margin, y);
-  y += lineHeight;
-  addText('Softwarica College of IT and E-commerce', margin, y);
-  y += lineHeight;
-  addText('Address: Gokarneshwor-11, Lalitpur', margin, y);
-  y += lineHeight;
-  addText('Phone no: +977 9800013123', margin, y);
-  y += lineHeight;
-  addText('Email: abc00319@softwarica.edu.np', margin, y);
+  references.forEach(line => {
+    if (y > doc.internal.pageSize.getHeight() - 80) {
+      doc.addPage();
+      y = margin;
+    }
+    addText(line, margin, y);
+    y += lineHeight;
+  });
 
-  doc.setFontSize(10);
-  doc.setTextColor(100);
-  doc.text('Page 2 / 2', pageWidth - margin - 60, doc.internal.pageSize.getHeight() - 30);
+  const pageCount = doc.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    const ph = doc.internal.pageSize.getHeight();
+    doc.text(`Page ${i} / ${pageCount}`, pageWidth - margin - 60, ph - 30);
+  }
 
-  // Save and open
   const pdfBlob = doc.output('blob');
   const url = URL.createObjectURL(pdfBlob);
   window.open(url);
@@ -517,14 +501,13 @@ doc.text('Page 1 / 2', pageWidth - margin - 60, doc.internal.pageSize.getHeight(
 }
 
 
-    // Terminal input handler
     terminalInput.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
         e.preventDefault();
         const input = terminalInput.value.trim().toLowerCase();
         if (input === '') return;
 
-        printOutput('$ ' + input);
+        printOutputInstant('root@bikash# ' + input);
 
         if (input === 'clear') {
           terminalOutput.innerHTML = '';
@@ -533,16 +516,16 @@ doc.text('Page 1 / 2', pageWidth - margin - 60, doc.internal.pageSize.getHeight(
         }
 
         if (input === 'cv') {
-          printOutput("Generating PDF cv...");
+          enqueueType("Generating PDF cv...");
           generateAndOpenResumePDF();
           terminalInput.value = '';
           return;
         }
 
         if (commands[input]) {
-          printOutput(commands[input]);
+          enqueueType(commands[input]);
         } else {
-          printOutput(`Command not found: ${input}. Try 'help' for available commands.`);
+          enqueueType(`Command not found: ${input}. Try 'help' for available commands.`);
         }
         terminalInput.value = '';
       }
