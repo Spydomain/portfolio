@@ -160,6 +160,39 @@ canvas#binary-rain {
   margin: 0 auto 12px;
 }
 
+.hero-text .about-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px auto 14px;
+  display: inline-block;      
+  text-align: left;           
+  max-width: 680px;
+}
+.hero-text .about-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #00ffc2;
+}
+.hero-text .about-list li.center-kathmandu {
+  justify-content: center;
+}
+.hero-text .about-list .icon {
+  width: 1.4em;               
+  text-align: center;
+  filter: drop-shadow(0 0 6px #00ff99);
+}
+.hero-text .about-desc {
+  max-width: 720px;
+  margin: 10px auto 0;
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: #00ffc2;
+}
+
 .section {
   max-width: 720px;
   margin: 0 auto 80px;
