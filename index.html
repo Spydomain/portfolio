@@ -137,6 +137,9 @@
       <br>
       <h3>ClipboardAI</h3>
       <p>Created a ClipboardAI using bash script. Available on GitHub: <a href="https://github.com/Spydomain/ClipboardAI.git" target="_blank" rel="noopener">https://github.com/Spydomain/ClipboardAI.git</a></p>
+      <br>
+      <h3>NotesVista</h3>
+      <p>Created a NotesVista using bash Node.js+React.js. Live at: <a href="https://notesvista.netlify.app/" target="_blank" rel="noopener">https://notesvista.netlify.app/</a></p>
     </div>
   </section>
 
@@ -151,6 +154,9 @@
       <br>
       <h3>TryHackMe Advent of Cyber 2022 Certified</h3>
       <p> <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-PWLIB4AZRJ.pdf" target="_blank" rel="noopener">https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-PWLIB4AZRJ.pdf</a></p>
+      <br>
+       <h3>Cisco Ethical Hacker Certified</h3>
+      <p> <a href="https://www.credly.com/badges/bb1675cb-f1e5-488d-9051-c353896aad19/public_url" target="_blank" rel="noopener">https://www.credly.com/badges/bb1675cb-f1e5-488d-9051-c353896aad19/public_url</a></p>
       <br>
     </div>
   </section>
@@ -282,11 +288,11 @@
       whoami: "Hi, I'm Bikash Sarraf — a cybersecurity & ethical hacking enthusiast.\nBased in Kathmandu, studying CyberSecurity & Ethical Hacking at Softwarica College.\nInterests: web security, pentesting, bug bounty, OSINT, and building tools with Python/Node/React.",
       education: `- SEE - 3.10 GPA\n  Shree Sharaswasti English Boarding School, Lipanimal-3,Bara Nepal (2023 A.D.)\n- +2 Science (Biology) - 3.08 GPA\n  Xavier International College, Kalopul,Kathmandu Nepal (2025 A.D.)\n- Bachelor’s in Cyber Security and Ethical Hacking\n  Currently pursuing at Softwarica College of IT & E-Commerce,Gyaneshwor,Kathmandu Nepal`,
       experience: `Currently no work experience`,
-      projects: `- Keylogger (Python)\n- Bike Rental Nepal (Node.js + React.js)\n- CVE-2023-22809 automated exploits (Python)\n- ClipboardAI (Bash) `,
+      projects: `- Keylogger (Python)\n- Bike Rental Nepal (Node.js + React.js)\n- CVE-2023-22809 automated exploits (Python)\n- ClipboardAI (Bash)\n- NotesVista (Node.js+React.js) `,
       contact: `Instagram: https://www.instagram.com/bikash.sarraf.399/\nFacebook: https://www.facebook.com/bikash.sarraf.399\nLinkedIn: https://www.linkedin.com/in/bikash-sarraf-683787320/\nEmail: bikashsarraf83@gmail.com`,
       github: "GitHub profile: https://github.com/Spydomain",
       linkedin: "LinkedIn profile: https://www.linkedin.com/in/bikash-sarraf-683787320/",
-      certifications: `- TryHackMe Presecurity Certified\n- TryHackMe Cyber Security 101 Certified\n- TryHackMe Advent of Cyber 2022 Certified`,
+      certifications: `- TryHackMe Presecurity Certified\n- TryHackMe Cyber Security 101 Certified\n- TryHackMe Advent of Cyber 2022 Certified\n- Cisco Ethical Hacker Certified`,
       clear: ''
     };
 
@@ -407,7 +413,8 @@ async function generateAndOpenResumePDF() {
   const certifications = [
     '• TryHackMe Presecurity Certified',
     '• TryHackMe Cyber Security 101 Certified',
-    '• TryHackMe Advent of Cyber 2022 Certified'
+    '• TryHackMe Advent of Cyber 2022 Certified',
+    '• Cisco Ethical Hacker Certified'
   ];
   certifications.forEach(line => {
     addText(line, margin, y);
@@ -449,7 +456,10 @@ async function generateAndOpenResumePDF() {
     '   • https://github.com/Spydomain/CVE-2023-22809-automated-python-exploits',
     '',
     '4. ClipboardAI (Bash Script)',
-    '   • https://github.com/Spydomain/ClipboardAI'
+    '   • https://github.com/Spydomain/ClipboardAI',
+    '',
+    '5. NotesVista (Node.js+React.js)',
+    '   • https://notesvista.netlify.app/'
   ];
   projects.forEach(line => {
     addText(line, margin, y);
