@@ -85,11 +85,11 @@
     <h2>🎓 Education</h2>
     <div class="card">
       <h3>SEE - 3.10 GPA</h3>
-      <p>Shree Sharaswasti English Boarding School, Lipanimal-3,Bara Nepal (2023 B.S.)</p>
+      <p>Shree Sharaswasti English Boarding School, Lipanimal-3,Bara Nepal (2022 A.D.)</p>
     </div>
     <div class="card">
       <h3>+2 Science (Biology) - 3.08 GPA</h3>
-      <p>Xavier International College, Kalopul,Kathmandu Nepal (2025 B.S.)</p>
+      <p>Xavier International College, Kalopul,Kathmandu Nepal (2024 A.D.)</p>
     </div>
     <div class="card">
       <h3>Bachelor’s in Cyber Security and Ethical Hacking</h3>
@@ -286,7 +286,7 @@
 - certifications
       `,
       whoami: "Hi, I'm Bikash Sarraf — a cybersecurity & ethical hacking enthusiast.\nBased in Kathmandu, studying CyberSecurity & Ethical Hacking at Softwarica College.\nInterests: web security, pentesting, bug bounty, OSINT, and building tools with Python/Node/React.",
-      education: `- SEE - 3.10 GPA\n  Shree Sharaswasti English Boarding School, Lipanimal-3,Bara Nepal (2023 A.D.)\n- +2 Science (Biology) - 3.08 GPA\n  Xavier International College, Kalopul,Kathmandu Nepal (2025 A.D.)\n- Bachelor’s in Cyber Security and Ethical Hacking\n  Currently pursuing at Softwarica College of IT & E-Commerce,Gyaneshwor,Kathmandu Nepal`,
+      education: `- SEE - 3.10 GPA\n  Shree Sharaswasti English Boarding School, Lipanimal-3,Bara Nepal (2022 A.D.)\n- +2 Science (Biology) - 3.08 GPA\n  Xavier International College, Kalopul,Kathmandu Nepal (2024 A.D.)\n- Bachelor’s in Cyber Security and Ethical Hacking\n  Currently pursuing at Softwarica College of IT & E-Commerce,Gyaneshwor,Kathmandu Nepal`,
       experience: `Currently no work experience`,
       projects: `- Keylogger (Python)\n- Bike Rental Nepal (Node.js + React.js)\n- CVE-2023-22809 automated exploits (Python)\n- ClipboardAI (Bash)\n- NotesVista (Node.js+React.js) `,
       contact: `Instagram: https://www.instagram.com/bikash.sarraf.399/\nFacebook: https://www.facebook.com/bikash.sarraf.399\nLinkedIn: https://www.linkedin.com/in/bikash-sarraf-683787320/\nEmail: bikashsarraf83@gmail.com`,
@@ -392,12 +392,12 @@ async function generateAndOpenResumePDF() {
 
   doc.setFontSize(11);
   addText('SEE - 3.10 GPA', margin, y);
-  doc.setFont('helvetica', 'italic'); doc.text('2023 A.D.', pageWidth - margin - 120, y); doc.setFont('helvetica', 'normal');
+  doc.setFont('helvetica', 'italic'); doc.text('2022 A.D.', pageWidth - margin - 120, y); doc.setFont('helvetica', 'normal');
   y += lineHeight;
   addText('Shree Sharaswasti English Boarding School, Lipanimal-3,Bara Nepal', margin, y);
   y += 20;
   addText('+2 Science (Biology) - 3.08 GPA', margin, y);
-  doc.setFont('helvetica', 'italic'); doc.text('2025 A.D.', pageWidth - margin - 120, y); doc.setFont('helvetica', 'normal');
+  doc.setFont('helvetica', 'italic'); doc.text('2024 A.D.', pageWidth - margin - 120, y); doc.setFont('helvetica', 'normal');
   y += lineHeight;
   addText('Xavier International College, Kalopul,Kathmandu Nepal', margin, y);
   y += 20;
