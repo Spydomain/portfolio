@@ -77,9 +77,6 @@ export function generateAndOpenResumePDF() {
     doc.text('2024 - Present', pageWidth - margin - 120, y - lineHeight);
     doc.setFont('helvetica', 'normal');
     y = addText('Softwarica College of IT and E-Commerce, Gyaneshwor, Kathmandu Nepal', margin, y);
-    y = addText('• Current GPA: 3.8/4.0', margin + 10, y);
-    y = addText('• Relevant Coursework: Network Security, Ethical Hacking, Digital Forensics,', margin + 10, y);
-    y = addText('  Cryptography, Secure Software Development', margin + 10, y);
     y += 10;
     
     y = addText('+2 Science (Biology) - 3.08 GPA', margin, y);
