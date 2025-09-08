@@ -1,557 +1,295 @@
 <!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bikash Sarraf Portfolio</title>
+<html lang="en">
+  <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <meta name="description" content="Bikash Sarraf - Cybersecurity & Ethical Hacking Enthusiast"/>
+    <meta name="keywords" content="cybersecurity, ethical hacking, portfolio, Bikash Sarraf, pentesting, infosec"/>
+    <title>Bikash Sarraf - Cybersecurity Enthusiast</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml"/>
+    <link rel="alternate icon" href="favicon.svg" type="image/x-icon"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>window.jsPDF = window.jspdf.jsPDF;</script>
+    <link rel="stylesheet" href="styles.css"/>
+    <script type="module" src="main.js"></script>
+  </head>
+  <body><canvas id="binary-rain"></canvas>
 
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet" />
-  
-  <link rel="stylesheet" href="index.css" />
-
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  
-
-</head>
-<body onload="startMatrix()">
-
- 
-  <canvas id="binary-rain"></canvas>
-
-  <nav class="navbar" >
-    <div class="logo glitch" id="hamburger" data-text="Bikash Sarraf">Bikash Sarraf</div>
+  <nav class="navbar">
+    <div class="logo glitch" data-text="Bikash Sarraf">Bikash Sarraf</div>
     <div class="hamburger" id="menu-toggle">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
     <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#education">Education</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#certifications">Certifications</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="#social">Social Media</a></li>
+      <li><a href="#" data-page="home"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="#" data-page="about"><i class="fas fa-user"></i> About</a></li>
+      <li><a href="#" data-page="education"><i class="fas fa-graduation-cap"></i> Education</a></li>
+      <li><a href="#" data-page="skills"><i class="fas fa-code"></i> Skills</a></li>
+      <li><a href="#" data-page="projects"><i class="fas fa-project-diagram"></i> Projects</a></li>
+      <li><a href="#" data-page="certifications"><i class="fas fa-certificate"></i> Certifications</a></li>
+      <li><a href="#" data-page="contact"><i class="fas fa-envelope"></i> Contact</a></li>
     </ul>
   </nav>
-
-  <script>
-  const hamburger = document.getElementById('menu-toggle');
-  const navMenu = document.querySelector('.nav-links');
-
-  hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('show');
-  });
-</script>
-
-  <section class="hero" id="about">
-    <img src="photo.jpg" alt="Bikash Sarraf Photo" class="profile-pic" />
-    <div class="hero-text">
-      <h1>Hello👋,I'm <span class="glitch stable" data-text="Bikash Sarraf">Bikash Sarraf</span></h1>
-      <p>Cybersecurity & Ethical Hacking Enthusiast</p>
-      <ul class="about-list">
-        <li class="center-kathmandu"><span class="icon">📍</span><span>Kathmandu,Nepal</span></li>
-        <li><span class="icon">💻</span><span>Softwarica College of IT and E-Commerce, Gyaneshwor, Kathmandu Nepal</span></li>
-        <li><span class="icon">🎓</span><span>CyberSecurity & Ethical Hacking Student</span></li>
-      </ul>
-      <p class="about-desc typewriter">I am passionate about learning new things in technology, especially cybersecurity, ethical hacking, and web development. I enjoy tackling challenges and continuously developing my skills.</p>
-    </div>
-  </section>
-
-
-  <section class="terminal-section" aria-label="Interactive terminal">
-    <div class="terminal-window" role="region" aria-live="polite">
-      <div class="terminal-header" aria-hidden="true">
-        <span class="traffic light red"></span>
-        <span class="traffic light yellow"></span>
-        <span class="traffic light green"></span>
-        <span class="terminal-title">root@bikash#</span>
-      </div>
-      <div class="terminal" id="terminal">
-        <div class="terminal-output" id="terminal-output" tabindex="0" aria-atomic="true"></div>
-        <div class="terminal-input">
-          <span class="prompt" aria-hidden="true">root@bikash#</span>
-          <input id="terminal-input" type="text" autocomplete="off" spellcheck="false" autofocus aria-label="Terminal command input" />
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <section class="section" id="education">
-    <h2>🎓 Education</h2>
-    <div class="card">
-      <h3>SEE - 3.10 GPA</h3>
-      <p>Shree Sharaswasti English Boarding School, Lipanimal-3,Bara Nepal (2022 A.D.)</p>
-    </div>
-    <div class="card">
-      <h3>+2 Science (Biology) - 3.08 GPA</h3>
-      <p>Xavier International College, Kalopul,Kathmandu Nepal (2024 A.D.)</p>
-    </div>
-    <div class="card">
-      <h3>Bachelor’s in Cyber Security and Ethical Hacking</h3>
-      <p>Currently pursuing at Softwarica College of IT & E-Commerce,Gyaneshwor,Kathmandu Nepal.</p>
-    </div>
-  </section>
-
-
-  <section class="section" id="skill">
-    <h2>🛠 Skills</h2>
-    <div class="card">
-      <h3>Programming Languages</h3>
-      <p> Intermediate HTML, C, Python, CSS, Node.js, React.js, Mysql, bash scripting and PHP.</p>
-    </div>
-    <div class="card">
-      <h3>Hacking Skills</h3>
-      <p>Practicing phishing, OSINT, session hacking, and studying Penetration Testing & Bug Bounty.</p>
-    </div>
-    <div class="card">
-      <h3>Languages</h3>
-      <p>Fluent in English, Nepali, and more.</p>
-    </div>
-  </section>
-
   
-  <section class="section" id="experience">
-    <h2>💼 Experience</h2>
-    <div class="card">
-      <h3>Currently no work experience</h3>
+  <div class="page-container">
+    <div id="home" class="page active">
+      <section class="hero">
+        <img src="photo.jpg" alt="Bikash Sarraf Photo" class="profile-pic" />
+        <div class="hero-text">
+          <h1>Hello👋, I'm <span class="glitch stable" data-text="Bikash Sarraf">Bikash Sarraf</span></h1>
+          <p>Cybersecurity & Ethical Hacking Enthusiast</p>
+          <ul class="about-list">
+            <li class="center-kathmandu"><span class="icon">📍</span><span>Kathmandu, Nepal</span></li>
+            <li><span class="icon">💻</span><span>Softwarica College of IT and E-Commerce, Gyaneshwor, Kathmandu Nepal</span></li>
+            <li><span class="icon">🎓</span><span>CyberSecurity & Ethical Hacking Student</span></li>
+          </ul>
+          <p class="about-desc typewriter">I am passionate about learning new things in technology, especially cybersecurity, ethical hacking, and web development. I enjoy tackling challenges and continuously developing my skills.</p>
+          <div class="cta-buttons">
+            <a href="#" class="glitch-btn" data-page="about">About Me</a>
+            <a href="#" class="glitch-btn" data-page="projects">View My Work</a>
+          </div>
+        </div>
+      </section>
+      
+      <section class="terminal-section" aria-label="Interactive terminal">
+        <div class="terminal-window" role="region" aria-live="polite">
+          <div class="terminal-header" aria-hidden="true">
+            <span class="traffic light red"></span>
+            <span class="traffic light yellow"></span>
+            <span class="traffic light green"></span>
+            <span class="terminal-title">root@bikash#</span>
+          </div>
+          <div class="terminal" id="terminal">
+            <div class="terminal-output" id="terminal-output" tabindex="0" aria-atomic="true"></div>
+            <div class="terminal-input">
+              <span class="prompt" aria-hidden="true">root@bikash#</span>
+              <input id="terminal-input" type="text" autocomplete="off" spellcheck="false" autofocus aria-label="Terminal command input" />
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
-  </section>
- 
-  <section class="section" id="projects">
-    <h2>🚀 Projects</h2>
-    <div class="card">
-      <h3>Keylogger</h3>
-      <p>Created a keylogger using Python. Available on GitHub: <a href="https://github.com/spidoman/keylogger.git" target="_blank" rel="noopener">https://github.com/Spydomain/keylogger.git</a></p>
-      <br>
-      <h3>Bike Rental Nepal</h3>
-      <p>Created a Bike Rental Nepal  using Node.js+React.js. Available on GitHub: <a href="https://github.com/Spydomain/front.git"  target="_blank" rel="noopener">https://github.com/Spydomain/front.git</a>
-      <a href="https://github.com/Spydomain/backend.git" target="_blank" rel="noopener">https://github.com/Spydomain/backend.git</a></p>
-      <br>
-      <h3>CVE-2023-22809-automated-python-exploits</h3>
-      <p>Created a CVE-2023-22809-automated-python-exploits using Python. Available on GitHub: <a href="https://github.com/Spydomain/CVE-2023-22809-automated-python-exploits.git" target="_blank" rel="noopener">https://github.com/Spydomain/CVE-2023-22809-automated-python-exploits.git</a></p>
-      <br>
-      <h3>ClipboardAI</h3>
-      <p>Created a ClipboardAI using bash script. Available on GitHub: <a href="https://github.com/Spydomain/ClipboardAI.git" target="_blank" rel="noopener">https://github.com/Spydomain/ClipboardAI.git</a></p>
-      <br>
-      <h3>NotesVista</h3>
-      <p>Created a NotesVista using bash Node.js+React.js. Live at: <a href="https://notesvista.netlify.app/" target="_blank" rel="noopener">https://notesvista.netlify.app/</a></p>
-    </div>
-  </section>
+    
 
-    <section class="section" id="certifications">
-    <h2>📜 Certifications</h2>
-    <div class="card">
-       <h3>TryHackMe Presecurity Certified</h3>
-       <p> <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-NU29DH9WJV.pdf" target="_blank" rel="noopener">https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-NU29DH9WJV.pdf</a></p>
-      <br>
-      <h3>TryHackMe cyber security 101 Certified</h3>
-      <p> <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-PGEU0CWYXH.pdf" target="_blank" rel="noopener">https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-PGEU0CWYXH.pdf</a></p>
-      <br>
-      <h3>TryHackMe Advent of Cyber 2022 Certified</h3>
-      <p> <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-PWLIB4AZRJ.pdf" target="_blank" rel="noopener">https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-PWLIB4AZRJ.pdf</a></p>
-      <br>
-       <h3>TryHackMe Advent of Cyber 2023 Certified</h3>
-      <p> <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-WO6LYGHRKY.pdf" target="_blank" rel="noopener">https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-WO6LYGHRKY.pdf</a></p>
-      <br>
-      <h3>TryHackMe Advent of Cyber 2024 Certified</h3>
-      <p> <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-MP7XN4KDPJ.pdf" target="_blank" rel="noopener">https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-MP7XN4KDPJ.pdf</a></p>
-      <br>
-       <h3>Cisco Ethical Hacker Certified</h3>
-      <p> <a href="https://www.credly.com/badges/bb1675cb-f1e5-488d-9051-c353896aad19/public_url" target="_blank" rel="noopener">https://www.credly.com/badges/bb1675cb-f1e5-488d-9051-c353896aad19/public_url</a></p>
-      <br>
+    <div id="about" class="page">
+      <section class="section">
+        <h2><i class="fas fa-user"></i> About Me</h2>
+        <div class="card">
+          <p>I am a passionate cybersecurity student with a strong interest in ethical hacking and web security. My journey in technology started with a curiosity about how things work, which led me to pursue a career in cybersecurity.</p>
+          <p>When I'm not studying or working on projects, I enjoy participating in CTF challenges, learning about new security vulnerabilities, and contributing to open-source security tools.</p>
+          <p>My goal is to become a skilled cybersecurity professional and help make the digital world a safer place.</p>
+        </div>
+      </section>
     </div>
-  </section>
-  <section class="section" id="contact">
-    <h2>📬 Contact Me</h2>
-    <div class="card">
-      <form
-  action="https://formspree.io/f/mqalwdpy"
-  method="POST"
-  enctype="multipart/form-data"
-  class="contact-form"
->
-  <label>
-    <span>Name:</span>
-    <input type="text" name="name" placeholder="Enter your name" required>
-  </label>
-
-  <label>
-    <span>Email:</span>
-    <input type="email" name="email" placeholder="Enter your email" required>
-  </label>
-
-  <label>
-    <span>Message:</span>
-    <textarea name="message" placeholder="Type your message..." rows="5" required></textarea>
-  </label>
-
-  <button type="submit" class="glitch-btn" data-text="SEND MESSAGE">SEND MESSAGE</button>
-</form>
+    
+    <div id="education" class="page">
+      <section class="section">
+        <h2><i class="fas fa-graduation-cap"></i> Education</h2>
+        <div class="card">
+          <h3>Bachelor's in Cyber Security and Ethical Hacking</h3>
+          <p>Currently pursuing at Softwarica College of IT & E-Commerce, Gyaneshwor, Kathmandu Nepal.</p>
+        </div>
+        <div class="card">
+          <h3>+2 Science (Biology) - 3.08 GPA</h3>
+          <p>Xavier International College, Kalopul, Kathmandu Nepal (2024 A.D.)</p>
+        </div>
+        <div class="card">
+          <h3>SEE - 3.10 GPA</h3>
+          <p>Shree Sharaswasti English Boarding School, Lipanimal-3, Bara Nepal (2022 A.D.)</p>
+        </div>
+      </section>
     </div>
-    <script>
-  const form = document.querySelector('.contact-form');
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    fetch(form.action, {
-      method: form.method,
-      body: new FormData(form),
-      headers: {
-        'Accept': 'application/json',
-      },
-    }).then(response => {
-      if (response.ok) {
-        alert('Message sent successfully!');
-        form.reset();
-        window.location.reload();
-      } else {
-        alert('Oops! There was a problem submitting your form');
-      }
-    }).catch(() => {
-      alert('Oops! There was a problem submitting your form');
-    });
-  });
-</script>
-  </section>
-  <section class="section" id="social">
-    <h2>📡 Social Media</h2>
-    <div class="social-links">
-      <a href="https://www.instagram.com/bikash.sarraf.399/" target="_blank" rel="noopener"><img src="instagram.jpeg" alt="Instagram" /></a>
-      <a href="https://www.facebook.com/bikash.sarraf.399" target="_blank" rel="noopener"><img src="facebook.png" alt="Facebook" /></a>
-      <a href="https://www.linkedin.com/in/bikash-sarraf-683787320/" target="_blank" rel="noopener"><img src="linkedin.png" alt="LinkedIn" /></a>
-      <a href="https://tryhackme.com/p/bikashsarraf" target="_blank" rel="noopener"><img src="tryhackme.png" alt="TryHackMe" /></a>
-      <a href="https://www.github.com/Spydomain" target="_blank" rel="noopener"><img src="github.png" alt="GitHub" /></a>
+    
+    <div id="skills" class="page">
+      <section class="section">
+        <h2><i class="fas fa-code"></i> Skills</h2>
+        <div class="card">
+          <h3>Programming Languages</h3>
+          <p>Intermediate HTML, C, Python, CSS, Node.js, React.js, MySQL, Bash scripting and PHP.</p>
+        </div>
+        <div class="card">
+          <h3>Hacking Skills</h3>
+          <p>Practicing phishing, OSINT, session hacking, and studying Penetration Testing & Bug Bounty.</p>
+        </div>
+        <div class="card">
+          <h3>Languages</h3>
+          <p>Fluent in English, Nepali, and more.</p>
+        </div>
+      </section>
     </div>
-  </section>
+
+    <div id="experience" class="page">
+      <section class="section">
+        <h2><i class="fas fa-briefcase"></i> Experience</h2>
+        <div class="card">
+          <h3>Currently no work experience</h3>
+        </div>
+      </section>
+    </div>
+    
+    <div id="projects" class="page">
+      <section class="section">
+        <h2><i class="fas fa-project-diagram"></i> Projects</h2>
+        <div class="card">
+          <div class="project-item">
+            <h3>Keylogger</h3>
+            <p>A Python-based keylogger project for educational purposes.</p>
+            <div class="project-links">
+              <a href="https://github.com/Spydomain/keylogger.git" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i> GitHub Repository
+              </a>
+            </div>
+          </div>
+          
+          <div class="project-item">
+            <h3>Bike Rental Nepal</h3>
+            <p>Full-stack bike rental platform built with Node.js and React.js</p>
+            <div class="project-links">
+              <a href="https://github.com/Spydomain/front.git" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i> Frontend
+              </a>
+              <a href="https://github.com/Spydomain/backend.git" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i> Backend
+              </a>
+            </div>
+          </div>
+          
+          <div class="project-item">
+            <h3>CVE-2023-22809 Exploits</h3>
+            <p>Automated Python exploits for CVE-2023-22809 vulnerability</p>
+            <div class="project-links">
+              <a href="https://github.com/Spydomain/CVE-2023-22809-automated-python-exploits.git" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i> GitHub Repository
+              </a>
+            </div>
+          </div>
+          
+          <div class="project-item">
+            <h3>ClipboardAI</h3>
+            <p>Bash script for AI-powered clipboard management</p>
+            <div class="project-links">
+              <a href="https://github.com/Spydomain/ClipboardAI.git" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i> GitHub Repository
+              </a>
+            </div>
+          </div>
+          
+          <div class="project-item">
+            <h3>NotesVista</h3>
+            <p>Modern note-taking application built with MERN stack</p>
+            <div class="project-links">
+              <a href="https://notesvista.netlify.app/" target="_blank" rel="noopener">
+                <i class="fas fa-external-link-alt"></i> Live Demo
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    
+
+    <div id="certifications" class="page">
+      <section class="section">
+        <h2><i class="fas fa-certificate"></i> Certifications</h2>
+        <div class="card">
+          <div class="certification-item">
+            <h3>TryHackMe Pre-Security</h3>
+            <p>Completed comprehensive cybersecurity fundamentals training</p>
+            <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-NU29DH9WJV.pdf" target="_blank" rel="noopener">
+              <i class="fas fa-certificate"></i> View Certificate
+            </a>
+          </div>
+          
+          <div class="certification-item">
+            <h3>Cyber Security 101</h3>
+            <p>Fundamentals of cybersecurity principles and practices</p>
+            <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-PGEU0CWYXH.pdf" target="_blank" rel="noopener">
+              <i class="fas fa-certificate"></i> View Certificate
+            </a>
+          </div>
+          
+          <div class="certification-item">
+            <h3>Advent of Cyber 2022</h3>
+            <p>24 days of cybersecurity challenges and learning</p>
+            <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-PWLIB4AZRJ.pdf" target="_blank" rel="noopener">
+              <i class="fas fa-certificate"></i> View Certificate
+            </a>
+          </div>
+          
+          <div class="certification-item">
+            <h3>Advent of Cyber 2023</h3>
+            <p>Advanced cybersecurity challenges and techniques</p>
+            <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-WO6LYGHRKY.pdf" target="_blank" rel="noopener">
+              <i class="fas fa-certificate"></i> View Certificate
+            </a>
+          </div>
+          
+          <div class="certification-item">
+            <h3>Advent of Cyber 2024</h3>
+            <p>Latest cybersecurity trends and offensive techniques</p>
+            <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-MP7XN4KDPJ.pdf" target="_blank" rel="noopener">
+              <i class="fas fa-certificate"></i> View Certificate
+            </a>
+          </div>
+          
+          <div class="certification-item">
+            <h3>Cisco Ethical Hacker</h3>
+            <p>Certified in ethical hacking methodologies and tools</p>
+            <a href="https://www.credly.com/badges/bb1675cb-f1e5-488d-9051-c353896aad19/public_url" target="_blank" rel="noopener">
+              <i class="fas fa-shield-alt"></i> View Badge
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+    
+    <div id="contact" class="page">
+      <section class="section">
+        <h2><i class="fas fa-envelope"></i> Contact Me</h2>
+        <div class="card">
+          <form action="https://formspree.io/f/mqalwdpy" method="POST" enctype="multipart/form-data" class="contact-form">
+            <label>
+              <span>Name:</span>
+              <input type="text" name="name" placeholder="Enter your name" required>
+            </label>
+
+            <label>
+              <span>Email:</span>
+              <input type="email" name="email" placeholder="Enter your email" required>
+            </label>
+
+            <label>
+              <span>Message:</span>
+              <textarea name="message" placeholder="Type your message..." rows="5" required></textarea>
+            </label>
+
+            <button type="submit" class="glitch-btn" data-text="SEND MESSAGE">SEND MESSAGE</button>
+          </form>
+          
+        </div>
+      </section>
+    </div>
+  </div>
+
 
   <footer>
-    <p>© 2025 Bikash Sarraf | All rights reserved</p>
+    <div class="social-links">
+      <h3>Connect with me:</h3>
+      <div class="social-icons">
+        <a href="https://github.com/Spydomain" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/bikash-sarraf-683787320/" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="mailto:bikashsarraf83@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+        <a href="https://www.instagram.com/bikash.sarraf.399/" target="_blank" rel="noopener" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://tryhackme.com/p/bikashsarraf" target="_blank" rel="noopener" title="TryHackMe"><i class="fas fa-shield-alt"></i></a>
+      </div>
+    </div>
+    <p>&copy; <span id="year"></span> Bikash Sarraf</p>
   </footer>
-
- 
   <script>
-    function startMatrix() {
-      const canvas = document.getElementById('binary-rain');
-      const ctx = canvas.getContext('2d');
-
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
-      const binary = ['0', '1'];
-      const fontSize = 16;
-      const columns = Math.floor(canvas.width / fontSize);
-
-      const drops = Array(columns).fill(1);
-
-      ctx.font = fontSize + 'px monospace';
-
-      function draw() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = '#39ff14';
-        for (let i = 0; i < drops.length; i++) {
-          const text = binary[Math.floor(Math.random() * binary.length)];
-          const x = i * fontSize;
-          const y = drops[i] * fontSize;
-          ctx.fillText(text, x, y);
-
-          if (y > canvas.height && Math.random() > 0.975) {
-            drops[i] = 0;
-          }
-          drops[i]++;
-        }
-      }
-
-      setInterval(draw, 40);
-
-      window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      });
-    }
-
-    const terminalOutput = document.getElementById('terminal-output');
-    const terminalInput = document.getElementById('terminal-input');
-
-    const commands = {
-      help: `Available commands:
-- whoami
-- education
-- experience
-- projects
-- contact
-- cv
-- clear
-- github
-- linkedin
-- certifications
-      `,
-      whoami: "Hi, I'm Bikash Sarraf — a cybersecurity & ethical hacking enthusiast.\nBased in Kathmandu, studying CyberSecurity & Ethical Hacking at Softwarica College.\nInterests: web security, pentesting, bug bounty, OSINT, and building tools with Python/Node/React.",
-      education: `- SEE - 3.10 GPA\n  Shree Sharaswasti English Boarding School, Lipanimal-3,Bara Nepal (2022 A.D.)\n- +2 Science (Biology) - 3.08 GPA\n  Xavier International College, Kalopul,Kathmandu Nepal (2024 A.D.)\n- Bachelor’s in Cyber Security and Ethical Hacking\n  Currently pursuing at Softwarica College of IT & E-Commerce,Gyaneshwor,Kathmandu Nepal`,
-      experience: `Currently no work experience`,
-      projects: `- Keylogger (Python)\n- Bike Rental Nepal (Node.js + React.js)\n- CVE-2023-22809 automated exploits (Python)\n- ClipboardAI (Bash)\n- NotesVista (Node.js+React.js) `,
-      contact: `Instagram: https://www.instagram.com/bikash.sarraf.399/\nFacebook: https://www.facebook.com/bikash.sarraf.399\nLinkedIn: https://www.linkedin.com/in/bikash-sarraf-683787320/\nEmail: bikashsarraf83@gmail.com`,
-      github: "GitHub profile: https://github.com/Spydomain",
-      linkedin: "LinkedIn profile: https://www.linkedin.com/in/bikash-sarraf-683787320/",
-      certifications: `- TryHackMe Presecurity Certified\n- TryHackMe Cyber Security 101 Certified\n- TryHackMe Advent of Cyber 2022 Certified\n- TryHackMe Advent of Cyber 2023 Certified\n- TryHackMe Advent of Cyber 2024 Certified\n- Cisco Ethical Hacker Certified`,
-      clear: ''
-    };
-
-    function printOutputInstant(text) {
-      const pre = document.createElement('pre');
-      pre.textContent = text;
-      terminalOutput.appendChild(pre);
-      terminalOutput.scrollTop = terminalOutput.scrollHeight;
-    }
-
-    let typingQueue = Promise.resolve();
-    function typeOutput(text, speed = 15) {
-      return new Promise(resolve => {
-        const pre = document.createElement('pre');
-        terminalOutput.appendChild(pre);
-        let i = 0;
-        (function step() {
-          pre.textContent = text.slice(0, i);
-          terminalOutput.scrollTop = terminalOutput.scrollHeight;
-          if (i < text.length) {
-            const delay = text[i] === '\n' ? speed * 2 : speed;
-            i++;
-            setTimeout(step, delay);
-          } else {
-            resolve();
-          }
-        })();
-      });
-    }
-    function enqueueType(text) {
-      typingQueue = typingQueue.then(() => typeOutput(text));
-      return typingQueue;
-    }
-
-    function preloadTerminalMessage() {
-      enqueueType("Try typing 'help' to get started.");
-    }
-
-async function generateAndOpenResumePDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({
-    unit: 'pt',
-    format: 'a4'
-  });
-
-  const pageWidth = doc.internal.pageSize.getWidth();
-  let y = 40;
-  const margin = 40;
-  const lineHeight = 16;
-
-  function addSectionHeader(text, yPos) {
-    doc.setFillColor(41, 82, 143); 
-    doc.rect(margin, yPos - 12, pageWidth - 2 * margin, 20, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text(text, margin + 8, yPos + 2);
-  }
-
-
-  function addText(text, x, yPos, options = {}) {
-    doc.setTextColor(0, 0, 0);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(11);
-    doc.text(text, x, yPos, options);
-  }
-
-
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(18);
-  doc.setTextColor(0, 0, 0);
-  doc.text('CURRICULUM VITAE', margin, y);
-  y += 30;
-
-
-  doc.setFontSize(14);
-  doc.text('Bikash Sarraf', margin, y);
-  doc.setFontSize(11);
-  doc.setTextColor(0, 0, 255);
-  doc.text('bikashsarraf83@gmail.com', pageWidth - margin - 200, y, { maxWidth: 200 });
-  y += lineHeight;
-
-  doc.setTextColor(0, 0, 0);
-  addText('Chabahil, Kathmandu', margin, y);
-  y += 30;
-
-  addSectionHeader('PROFESSIONAL EXPERIENCE', y);
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(11);
-  doc.setTextColor(0, 0, 0);
-  y += 35;
-  doc.text('Currently no professional experience', margin, y);
-  y += 40;
-
-  addSectionHeader('EDUCATION', y);
-  y += 35;
-
-  doc.setFontSize(11);
-  addText('SEE - 3.10 GPA', margin, y);
-  doc.setFont('helvetica', 'italic'); doc.text('2022 A.D.', pageWidth - margin - 120, y); doc.setFont('helvetica', 'normal');
-  y += lineHeight;
-  addText('Shree Sharaswasti English Boarding School, Lipanimal-3,Bara Nepal', margin, y);
-  y += 20;
-  addText('+2 Science (Biology) - 3.08 GPA', margin, y);
-  doc.setFont('helvetica', 'italic'); doc.text('2024 A.D.', pageWidth - margin - 120, y); doc.setFont('helvetica', 'normal');
-  y += lineHeight;
-  addText('Xavier International College, Kalopul,Kathmandu Nepal', margin, y);
-  y += 20;
-  addText('Bachelor’s in Cyber Security and Ethical Hacking', margin, y);
-  doc.setFont('helvetica', 'italic'); doc.text('Pursuing', pageWidth - margin - 120, y); doc.setFont('helvetica', 'normal');
-  y += lineHeight;
-  addText('Softwarica College of IT and E-Commerce, Gyaneshwor,Kathmandu Nepal', margin, y);
-  y += 30;
-
-  addSectionHeader('CERTIFICATION', y);
-  y += 35;
-
-  const certifications = [
-    '• TryHackMe Presecurity Certified',
-    '• TryHackMe Cyber Security 101 Certified',
-    '• TryHackMe Advent of Cyber 2022 Certified',
-    '• TryHackMe Advent of Cyber 2023 Certified',
-    '• TryHackMe Advent of Cyber 2024 Certified',
-    '• Cisco Ethical Hacker Certified'
-  ];
-  certifications.forEach(line => {
-    addText(line, margin, y);
-    y += lineHeight;
-  });
-  y += 20;
-
-  addSectionHeader('SKILLS', y);
-  y += 35;
-
-  const skills = [
-    '• Programming: Intermediate HTML, C, Python, CSS, Node.js, React.js, MySQL, Bash, PHP',
-    '• Hacking: Practicing phishing, OSINT, session hacking, learning Pentesting & Bug Bounty',
-    '• Languages: English, Nepali, and more'
-  ];
-  skills.forEach(line => {
-    addText(line, margin, y);
-    y += lineHeight;
-  });
-  y += 20;
-
-  y += 20;
-
-  if (y > doc.internal.pageSize.getHeight() - 120) {
-    doc.addPage();
-    y = margin;
-  }
-
-  addSectionHeader('PROJECTS', y);
-  y += 35;
-  const projects = [
-    '1. Keylogger (Python)',
-    '   • Created a keylogger using Python. GitHub: https://github.com/Spydomain/keylogger',
-    '',
-    '2. Bike Rental Nepal (Node.js + React.js)',
-    '   • Frontend: https://github.com/Spydomain/front  |  Backend: https://github.com/Spydomain/backend',
-    '',
-    '3. CVE-2023-22809 Automated Exploits (Python)',
-    '   • https://github.com/Spydomain/CVE-2023-22809-automated-python-exploits',
-    '',
-    '4. ClipboardAI (Bash Script)',
-    '   • https://github.com/Spydomain/ClipboardAI',
-    '',
-    '5. NotesVista (Node.js+React.js)',
-    '   • https://notesvista.netlify.app/'
-  ];
-  projects.forEach(line => {
-    addText(line, margin, y);
-    y += lineHeight;
-  });
-  y += 40;
-
-
-  const projectsCont = [];
-  projectsCont.forEach(line => {
-    addText(line, margin, y);
-    y += lineHeight;
-  });
-  y += 50;
-
-  if (y > doc.internal.pageSize.getHeight() - 120) {
-    doc.addPage();
-    y = margin;
-  }
-
-  addSectionHeader('REFERENCES', y);
-  y += 35;
-  const references = [
-    'Academic Reference: Softwarica College',
-    'Professional Reference: '
-  ];
-
-  references.forEach(line => {
-    if (y > doc.internal.pageSize.getHeight() - 80) {
-      doc.addPage();
-      y = margin;
-    }
-    addText(line, margin, y);
-    y += lineHeight;
-  });
-
-  const pageCount = doc.getNumberOfPages();
-  for (let i = 1; i <= pageCount; i++) {
-    doc.setPage(i);
-    doc.setFontSize(10);
-    doc.setTextColor(100);
-    const ph = doc.internal.pageSize.getHeight();
-    doc.text(`Page ${i} / ${pageCount}`, pageWidth - margin - 60, ph - 30);
-  }
-
-  const pdfBlob = doc.output('blob');
-  const url = URL.createObjectURL(pdfBlob);
-  window.open(url);
-
-  doc.save('Bikash_Sarraf_Resume.pdf');
-}
-
-
-    terminalInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        const input = terminalInput.value.trim().toLowerCase();
-        if (input === '') return;
-
-        printOutputInstant('root@bikash# ' + input);
-
-        if (input === 'clear') {
-          terminalOutput.innerHTML = '';
-          terminalInput.value = '';
-          return;
-        }
-
-        if (input === 'cv') {
-          enqueueType("Generating PDF cv...");
-          generateAndOpenResumePDF();
-          terminalInput.value = '';
-          return;
-        }
-
-        if (commands[input]) {
-          enqueueType(commands[input]);
-        } else {
-          enqueueType(`Command not found: ${input}. Try 'help' for available commands.`);
-        }
-        terminalInput.value = '';
-      }
-    });
-
-    preloadTerminalMessage();
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
-</body>
-</html>
+
+  </body>
+  </html>
