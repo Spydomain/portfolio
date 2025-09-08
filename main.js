@@ -18,7 +18,7 @@ function updateFooterOffset() {
     if (!footer || !container) return;
     const height = footer.getBoundingClientRect().height;
     container.style.paddingBottom = Math.ceil(height + 40) + 'px';
-  } catch (_) 
+  } catch (_) { /* noop */ }
 }
 
  
