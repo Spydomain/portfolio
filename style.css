@@ -101,16 +101,18 @@ img, video, canvas {
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-  background-color: rgba(10, 10, 10, 0.9);
+  background: rgba(10, 10, 10, 0.7);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 255, 153, 0.1);
-  padding-right: 1.5rem;
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border-bottom: 1px solid rgba(0, 255, 153, 0.15);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
   height: 64px;
+  padding-right: 1.5rem;
 }
 .nav-links {
   display: flex;
@@ -127,6 +129,7 @@ img, video, canvas {
   font-size: 2.5rem;
   font-weight: 900;
   color: #00ff99;
+  margin-left: 70px; /* Add margin to prevent overlap with hamburger menu */
   position: relative;
   letter-spacing: 0.12em;
   user-select: none;
@@ -240,35 +243,66 @@ img, video, canvas {
 }
 
 .hamburger {
-  display: none;
+  display: flex;
   flex-direction: column;
-  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
   padding: 10px;
-  z-index: 1000;
-  position: absolute;
-  left: 20px;
-  top: 20px;
+  cursor: pointer;
+  background: none !important;
+  border: none !important;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  box-shadow: none !important;
+  position: relative;
+  margin: 0;
 }
 
 .hamburger span {
   display: block;
-  width: 25px;
-  height: 2px;
+  position: absolute;
+  height: 3px;
+  width: 100%;
   background: #00ff99;
-  margin: 5px 0;
-  transition: all 0.3s ease;
+  border-radius: 3px;
+  opacity: 1;
+  left: 0;
+  transform: rotate(0deg);
+  transition: .25s ease-in-out;
+  border-radius: 1px;
+  position: absolute;
+  left: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.hamburger span:nth-child(1) {
+  top: 0px;
+}
+
+.hamburger span:nth-child(2) {
+  top: 10px;
+}
+
+.hamburger span:nth-child(3) {
+  top: 20px;
+}
+
+/* X Animation */
 .hamburger.active span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
+  top: 10px;
+  transform: rotate(135deg);
 }
 
 .hamburger.active span:nth-child(2) {
   opacity: 0;
+  left: -30px;
 }
 
 .hamburger.active span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
+  top: 10px;
+  transform: rotate(-135deg);
 }
 
 .hero {
@@ -600,9 +634,13 @@ img, video, canvas {
 }
 
 .terminal-window {
-  background: rgba(0, 15, 8, 0.55);
+  background: rgba(0, 15, 8, 0.25);
   border-radius: 12px;
   overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 255, 153, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 31, 15, 0.37);
   width: 100%;
   max-width: 100%;
   margin: 15px auto;
@@ -615,6 +653,7 @@ img, video, canvas {
   .terminal-window {
     margin: 50px auto;
     width: 100%;
+    max-width: 900px;
   }
 }
 
@@ -647,8 +686,11 @@ img, video, canvas {
 
 .terminal {
   padding: 20px;
-  min-height: clamp(300px, 45vh, 720px);
-  max-height: none;
+  min-height: 300px;
+  max-height: 70vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 153, 0.3) transparent;
   overflow-y: auto;
   font-family: 'Roboto Mono', monospace;
   font-size: clamp(0.95rem, 1.2vw, 1.1rem);
@@ -689,6 +731,8 @@ img, video, canvas {
   white-space: pre-wrap;
   word-break: break-word;
   font-family: 'Roboto Mono', monospace;
+  line-height: 1.6;
+  font-size: 0.9rem;
 }
 
 .terminal-input {
@@ -1444,91 +1488,77 @@ footer .social-icons {
   display: none;
   cursor: pointer;
   z-index: 1001;
-  width: 30px;
-  height: 20px;
-  position: relative;
-  -webkit-transform: rotate(0deg);
-  -moz-transform: rotate(0deg);
-  -o-transform: rotate(0deg);
-  transform: rotate(0deg);
-  -webkit-transition: .3s ease-in-out;
-  -moz-transition: .3s ease-in-out;
-  -o-transition: .3s ease-in-out;
-  transition: .3s ease-in-out;
-  margin-left: auto;
-  padding: 10px;
+  width: 44px;
+  height: 44px;
+  position: fixed;
+  top: 20px;
   right: 20px;
-  top: 10px;
-  background: transparent;
-  border: none;
+  padding: 10px 8px;
+  background: rgba(0, 20, 40, 0.8);
+  border: 1px solid rgba(0, 255, 153, 0.3);
+  border-radius: 4px;
+  outline: none;
+  transition: all 0.3s ease;
 }
 
 .hamburger span {
   display: block;
   position: absolute;
   height: 3px;
-  width: 100%;
+  width: 24px;
   background: #00ff99;
-  border-radius: 2px;
+  border-radius: 3px;
   opacity: 1;
-  left: 0;
-  -webkit-transform: rotate(0deg);
-  -moz-transform: rotate(0deg);
-  -o-transform: rotate(0deg);
+  left: 10px;
   transform: rotate(0deg);
-  -webkit-transition: .2s ease-in-out;
-  -moz-transition: .2s ease-in-out;
-  -o-transition: .2s ease-in-out;
-  transition: .2s ease-in-out;
-  transform-origin: left center;
+  transition: all 0.3s ease-in-out;
+  transform-origin: center;
 }
 
 .hamburger span:nth-child(1) {
-  top: 0;
-  width: 25px;
-  right: 0;
-  left: auto;
+  top: 15px;
+  transform-origin: center;
 }
 
 .hamburger span:nth-child(2) {
-  top: 8px;
-  width: 20px;
-  right: 0;
-  left: auto;
+  top: 21px;
+  opacity: 1;
+  transform-origin: center;
 }
 
 .hamburger span:nth-child(3) {
-  top: 16px;
-  width: 15px;
-  right: 0;
-  left: auto;
+  top: 27px;
+  transform-origin: center;
+}
+
+.hamburger.active {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 255, 153, 0.4);
+  box-shadow: 0 0 15px rgba(0, 255, 153, 0.2);
 }
 
 .hamburger.active span:nth-child(1) {
-  -webkit-transform: rotate(45deg) translate(0px, -1px);
-  -moz-transform: rotate(45deg) translate(0px, -1px);
-  -o-transform: rotate(45deg) translate(0px, -1px);
-  transform: rotate(45deg) translate(0px, -1px);
-  width: 25px;
-  right: 0;
-  top: 1px;
+  transform: translateY(6px) rotate(45deg);
+  width: 24px;
+  left: 10px;
+  background: #00ff99;
+  box-shadow: 0 0 10px rgba(0, 255, 153, 0.8);
 }
 
 .hamburger.active span:nth-child(2) {
-  width: 0%;
   opacity: 0;
+  transform: scaleX(0);
 }
 
 .hamburger.active span:nth-child(3) {
-  -webkit-transform: rotate(-45deg) translate(8px, -8px);
-  -moz-transform: rotate(-45deg) translate(8px, -8px);
-  -o-transform: rotate(-45deg) translate(8px, -8px);
-  transform: rotate(-45deg) translate(8px, -8px);
-  width: 25px;
-  right: 0;
-  top: 19px;
+  transform: translateY(-6px) rotate(-45deg);
+  width: 24px;
+  left: 10px;
+  top: 27px;
+  background: #00ff99;
+  box-shadow: 0 0 10px rgba(0, 255, 153, 0.8);
 }
-
 
 .nav-links {
   display: flex;
@@ -1561,38 +1591,16 @@ footer .social-icons {
   }
 }
 
-.hamburger {
-  display: none; 
-  flex-direction: column;
-  justify-content: space-between;
-  width: 44px;
-  height: 44px;
-  cursor: pointer;
-  z-index: 1001;
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 10px 8px;
-  background: rgba(0, 20, 40, 0.8);
-  border: 1px solid rgba(0, 255, 153, 0.3);
-  border-radius: 8px;
-  outline: none;
-  transition: all 0.3s ease;
-}
-
 .hamburger:hover {
   background: rgba(0, 30, 60, 0.9);
   box-shadow: 0 0 15px rgba(0, 255, 153, 0.2);
 }
 
-.hamburger span {
-  display: block;
-  width: 100%;
-  height: 3px;
-  background-color: #00ff99;
-  border-radius: 3px;
-  transition: all 0.3s ease;
+.hamburger:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 255, 153, 0.5);
 }
+
 
 @media (max-width: 992px) {
   .hamburger {
@@ -1605,8 +1613,8 @@ footer .social-icons {
     right: -300px;
     width: 280px;
     height: 100vh;
-    background: rgba(10, 25, 47, 0.98);
-    backdrop-filter: blur(10px);
+    background: transparent;
+    backdrop-filter: none;
     flex-direction: column;
     padding: 100px 20px 30px;
     margin: 0;
@@ -1614,15 +1622,15 @@ footer .social-icons {
     transition: right 0.4s ease-in-out;
     z-index: 1000;
     display: flex !important;
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+    box-shadow: none;
   }
   
-  .nav-links.show { right: 0; }
+  .nav-links.show { left: 0; }
   
   .nav-links li {
     margin: 10px 0;
     opacity: 0;
-    transform: translateX(20px);
+    transform: translateX(-20px);
     transition: all 0.3s ease;
   }
   
@@ -1645,6 +1653,24 @@ footer .social-icons {
     color: #fff;
     background: rgba(0, 255, 153, 0.1);
     border-radius: 4px;
+    transform: translateX(5px);
+  }
+  
+  .nav-links a {
+    display: block;
+    padding: 12px 15px;
+    margin: 8px 0;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    color: #00ff99;
+    text-decoration: none;
+  }
+  
+  .nav-links a i {
+    width: 25px;
+    margin-right: 10px;
+    text-align: center;
   }
 }
 
@@ -1740,20 +1766,20 @@ footer .social-icons {
   .nav-links {
     position: fixed;
     top: 0;
-    right: -320px;
+    left: -320px;
     width: 280px;
     height: 100vh;
     background: #0a0a0a;
     flex-direction: column;
     justify-content: flex-start;
     padding: 80px 20px 20px;
-    transition: right 0.3s ease-in-out;
+    transition: left 0.3s ease-in-out;
     z-index: 950;
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
   }
 
   .nav-links.show {
-    right: 0;
+    left: 0;
   }
 
   .nav-links li {
@@ -1953,8 +1979,8 @@ footer .social-icons {
     display: flex;
     position: fixed;
     top: 20px;
-    right: 20px;
-    left: auto;
+    left: 20px;
+    right: auto;
     z-index: 1001;
     background: rgba(10, 25, 47, 0.9);
     border-radius: 5px;
@@ -2120,7 +2146,17 @@ footer .social-icons {
   }
   
   .terminal-section {
-    margin: 40px auto;
+    margin: 20px auto;
+    padding: 0 15px;
+  }
+  
+  .terminal-window {
+    border-radius: 10px;
+  }
+  
+  .terminal {
+    padding: 15px;
+    min-height: 250px;
   }
 }
 
@@ -2628,16 +2664,20 @@ footer.legacy-layout {
   .logo {
     font-size: 1.8rem;
     line-height: 1.1;
-    padding-right: 56px; 
+    margin-left: 70px; /* Match the desktop margin */
+    padding-right: 20px; /* Reduced from 56px to prevent overflow */ 
     white-space: nowrap;
   }
   .hamburger {
-    position: absolute !important; 
-    top: 50% !important;
-    right: 16px !important;
-    left: auto !important;
-    transform: translateY(-50%);
+    position: fixed !important;
+    top: 8px !important;
+    left: 0px !important;
+    right: auto !important;
+    transform: none !important;
     z-index: 1201;
+    display: flex !important;
+    width: 44px !important;
+    height: 44px !important;
   }
   .page-container {
     padding-top: 88px !important; 
