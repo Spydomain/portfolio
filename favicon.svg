@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#003322"/>
+      <stop offset="100%" stop-color="#00110a"/>
+    </radialGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="64" height="64" fill="#0b0f19"/>
+  <circle cx="32" cy="32" r="30" fill="url(#g)" stroke="#00ff99" stroke-opacity="0.15"/>
+  <g font-family="'Roboto Mono', monospace" font-weight="900" text-anchor="middle" dominant-baseline="middle">
+    <text x="32" y="34" font-size="26" fill="#00ff99" filter="url(#glow)">BS</text>
+  </g>
+</svg>
