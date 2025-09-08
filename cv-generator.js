@@ -131,7 +131,10 @@ export function generateAndOpenResumePDF() {
       '4. ClipboardAI (Bash Script)',
       '   • https://github.com/Spydomain/ClipboardAI',
       '',
-      '5. NotesVista (Node.js+React.js)',
+      '5. NebullaComms (Node.js+React.js)',
+      '   • https://nebullacomms.netlify.app/',
+      '',
+      '6. NotesVista (Node.js+React.js)',
       '   • https://notesvista.netlify.app/'
     ];
     
