@@ -151,7 +151,10 @@ export function generateAndOpenResumePDF() {
       '   • https://github.com/Spydomain/ClipboardAI',
       '',
       '5. NotesVista (Node.js+React.js)',
-      '   • https://notesvista.netlify.app/'
+      '   • https://notesvista.netlify.app/',
+      '',
+      '6. FGE Identification Test Platform (Flutter)',
+      '   • https://army-testgit-45113358-666ec.web.app/'
     ];
     
     projects.forEach(project => {
@@ -172,7 +175,8 @@ export function generateAndOpenResumePDF() {
       '• TryHackMe Advent of Cyber 2022 Certified',
       '• TryHackMe Advent of Cyber 2023 Certified',
       '• TryHackMe Advent of Cyber 2024 Certified',
-      '• Cisco Ethical Hacker Certified'
+      '• Cisco Ethical Hacker Certified',
+      '• Certified Cybersecurity Educator Professional (CCEP)'
     ];
     
     certifications.forEach(cert => {
