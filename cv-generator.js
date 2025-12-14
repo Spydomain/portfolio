@@ -176,7 +176,9 @@ export function generateAndOpenResumePDF() {
       '• TryHackMe Advent of Cyber 2023 Certified',
       '• TryHackMe Advent of Cyber 2024 Certified',
       '• Cisco Ethical Hacker Certified',
-      '• Certified Cybersecurity Educator Professional (CCEP)'
+      '• Certified Cybersecurity Educator Professional (CCEP)',
+      '• Google Cybersecurity Professional Certificate',
+      '• CompTIA PenTest+ (PT0-002)'
     ];
     
     certifications.forEach(cert => {
