@@ -123,9 +123,8 @@ export function generateAndOpenResumePDF() {
     y = addSectionHeader('SKILLS', y);
     
     const skills = [
-      '• Programming: Intermediate HTML, C, Python, CSS, Node.js, React.js, MySQL, Bash, PHP',
-      '• Hacking: Practicing phishing, OSINT, session hacking, learning Pentesting & Bug Bounty',
-      '• Languages: English, Nepali, and more'
+      '• Languages: Intermediate HTML, C, Python, CSS, Node.js, React.js, MySQL, Bash, PHP',
+      '• Hacking: Practicing phishing, OSINT, session hacking, learning Pentesting & Bug Bounty'
     ];
     
     skills.forEach(skill => {
@@ -178,7 +177,8 @@ export function generateAndOpenResumePDF() {
       '• Cisco Ethical Hacker Certified',
       '• Certified Cybersecurity Educator Professional (CCEP)',
       '• Google Cybersecurity Professional Certificate',
-      '• CompTIA PenTest+ (PT0-002)'
+      '• CompTIA PenTest+ (PT0-002)',
+      '• Certified API Security Analyst'
     ];
     
     certifications.forEach(cert => {
