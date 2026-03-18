@@ -165,7 +165,7 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     position: fixed !important;
     top: 0 !important; left: 0 !important;
     right: auto !important; bottom: 0 !important;
-    width: 260px !important;
+    width: 100vw !important;
     height: 100vh !important;
     /* Flex */
     display: flex !important;
@@ -173,7 +173,7 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     align-items: stretch !important;
     justify-content: flex-start !important;
     gap: 6px !important;
-    padding: 76px 12px 24px !important;
+    padding: 76px 24px 24px !important;
     margin: 0 !important;
     /* Visual — solid opaque color, NO backdrop-filter (causes blur bleed) */
     background: #000000 !important;
@@ -228,22 +228,22 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     align-items: center !important;
     gap: 12px !important;
     width: 100% !important;
-    padding: 16px 18px !important;
+    padding: 18px 22px !important;
     margin: 0 !important;
     /* TEXT — maximum brightness, no transparency */
     color: #00ff99 !important;
     -webkit-text-fill-color: #00ff99 !important;
-    font-size: 1.05rem !important;
-    font-weight: 700 !important;
+    font-size: 1.1rem !important;
+    font-weight: 800 !important;
     text-decoration: none !important;
-    letter-spacing: 0.04em !important;
-    text-shadow: 0 0 8px rgba(0,255,153,0.6) !important;
+    letter-spacing: 0.05em !important;
+    text-shadow: 0 0 10px #00ff99 !important;
     /* Visibility — absolute, no tricks */
     opacity: 1 !important;
     visibility: visible !important;
     /* Background — dark solid, no alpha blending issues */
-    background: #0a1f10 !important;
-    border: 1px solid #00ff99 !important;
+    background: #061a0c !important;
+    border: 1px solid rgba(0,255,153,0.6) !important;
     border-radius: 8px !important;
     /* Layout */
     overflow: visible !important;
