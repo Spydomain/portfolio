@@ -195,20 +195,16 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     gap: 6px !important;
     padding: 76px 24px 24px !important;
     margin: 0 !important;
-    /* Visual — SOLID BLACK, NO TRANSPARENCY, NO BLUR */
+    /* Visual — SOLID OPAQUE BLACK */
     background: #000000 !important;
     background-color: #000000 !important;
-    /* CRITICAL: REMOVE ALL BLUR - EVERY VARIATION */
+    /* CRITICAL: COMPLETELY REMOVE ALL BLUR */
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     -moz-backdrop-filter: none !important;
-    filter: none !important;
-    -webkit-filter: none !important;
-    -moz-filter: none !important;
-    /* Ensure no inherited blur */
-    will-change: auto !important;
-    backface-visibility: auto !important;
-    perspective: none !important;
+    filter: brightness(1) !important;
+    -webkit-filter: brightness(1) !important;
+    -moz-filter: brightness(1) !important;
     /* Font rendering */
     -webkit-font-smoothing: subpixel-antialiased !important;
     -moz-osx-font-smoothing: grayscale !important;
@@ -217,19 +213,22 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     box-shadow: 6px 0 40px rgba(0,0,0,0.9) !important;
     /* Slide behaviour */
     transition: transform 0.3s cubic-bezier(0.4,0,0.2,1) !important;
-    /* Z — MUST be above everything to be clickable */
+    /* Z — MUST be above everything */
     z-index: 10001 !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    /* Isolate from parent stacking contexts */
+    /* Isolate from parent */
     isolation: isolate !important;
     /* Ensure pointer events work */
     pointer-events: auto !important;
+    transform: translateX(-100%) !important;
   }
 
   /* Slide in */
   .nav-links.is-open {
     transform: translateX(0) !important;
+    filter: brightness(1) !important;
+    -webkit-filter: brightness(1) !important;
   }
 
   /* ── li — 100% SHARP AND CLEAR ── */
@@ -495,24 +494,26 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
   text-decoration: none; padding: 12px 28px; border-radius: 30px;
   font-weight: bold; transition: all 0.3s ease; text-align: center;
   display: inline-flex; align-items: center; gap: 8px;
-  /* Ensure text is visible */
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
-  font-size: 1rem !important;
+  /* Ensure text is ALWAYS visible */
   opacity: 1 !important;
   visibility: visible !important;
   text-shadow: none !important;
   filter: none !important;
   backdrop-filter: none !important;
+  font-size: 1rem !important;
+  line-height: 1.4 !important;
 }
 .cta-buttons a:first-child { 
-  background: linear-gradient(45deg,#00ff99,#00cc99); 
-  color: #000; 
+  background: linear-gradient(45deg,#00ff99,#00cc99) !important; 
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
   box-shadow: 0 4px 15px rgba(0,255,153,0.3); 
 }
 .cta-buttons a:last-child  { 
-  border: 2px solid #00ff99; 
-  color: #00ff99 !important; 
+  border: 2px solid #00ff99 !important; 
+  color: #00ff99 !important;
+  -webkit-text-fill-color: #00ff99 !important;
+  background: transparent !important;
 }
 .cta-buttons a:hover { 
   transform: translateY(-3px); 
