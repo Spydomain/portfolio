@@ -146,9 +146,9 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
 .nav-overlay.is-open { display: block; }
 
 /* =============================================
-   MOBILE NAV  ← THE COMPLETE FIX
-   Uses translateX only — zero opacity/visibility
-   tricks on li or a elements whatsoever.
+   MOBILE NAV  ← FIXED VERSION
+   Menu width: 75vw (leaves 25% background visible)
+   No blur - crystal clear text rendering
 ============================================= */
 @media (max-width: 992px) {
 
@@ -165,7 +165,7 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     position: fixed !important;
     top: 0 !important; left: 0 !important;
     right: auto !important; bottom: 0 !important;
-    width: 100vw !important;
+    width: 75vw !important;
     height: 100vh !important;
     /* Flex */
     display: flex !important;
