@@ -34,6 +34,8 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
   border-bottom: 1px solid rgba(0,255,153,0.15);
   box-shadow: 0 4px 30px rgba(0,0,0,0.3);
   height: 64px;
+  -webkit-backdrop-filter: blur(12px);
+  -moz-backdrop-filter: blur(12px);
 }
 
 .logo {
@@ -81,6 +83,10 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
   background: none; border: none; outline: none; box-shadow: none;
   position: fixed; top: 12px; left: 10px; z-index: 10000;
   -webkit-tap-highlight-color: transparent;
+  /* Focus improvements */
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .hamburger span {
@@ -178,8 +184,16 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     /* Visual — solid opaque color, NO backdrop-filter (causes blur bleed) */
     background: #000000 !important;
     background-color: #000000 !important;
+    /* CRITICAL: Remove ALL blur filters */
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+    -moz-backdrop-filter: none !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+    /* Font rendering */
+    -webkit-font-smoothing: subpixel-antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeLegibility !important;
     border-right: 2px solid #00ff99 !important;
     box-shadow: 6px 0 40px rgba(0,0,0,0.9) !important;
     /* Slide behaviour — transform only, children always visible */
@@ -230,14 +244,14 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     width: 100% !important;
     padding: 18px 22px !important;
     margin: 0 !important;
-    /* TEXT — maximum brightness, no transparency */
+    /* TEXT — maximum brightness, sharp rendering */
     color: #00ff99 !important;
     -webkit-text-fill-color: #00ff99 !important;
     font-size: 1.1rem !important;
     font-weight: 800 !important;
     text-decoration: none !important;
     letter-spacing: 0.05em !important;
-    text-shadow: 0 0 10px #00ff99 !important;
+    text-shadow: none !important;
     /* Visibility — absolute, no tricks */
     opacity: 1 !important;
     visibility: visible !important;
@@ -255,9 +269,14 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     line-height: 1.4 !important;
     clip-path: none !important;
     filter: none !important;
-    /* No inherited blur */
+    /* CRITICAL: No blur effects at all */
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+    -moz-backdrop-filter: none !important;
+    /* Font rendering optimization */
+    -webkit-font-smoothing: subpixel-antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeLegibility !important;
     transition: background 0.18s ease, box-shadow 0.18s ease !important;
   }
 
@@ -267,6 +286,8 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     box-shadow: 0 0 12px rgba(0,255,153,0.4) !important;
     color: #00ffcc !important;
     -webkit-text-fill-color: #00ffcc !important;
+    filter: none !important;
+    backdrop-filter: none !important;
   }
 
   .nav-links li a.active,
@@ -275,6 +296,8 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     border-left: 4px solid #00ff99 !important;
     color: #00ff99 !important;
     -webkit-text-fill-color: #00ff99 !important;
+    filter: none !important;
+    backdrop-filter: none !important;
   }
 
   /* Icons inside links */
@@ -287,6 +310,10 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     opacity: 1 !important;
     visibility: visible !important;
     filter: none !important;
+    /* Icon rendering optimization */
+    -webkit-font-smoothing: subpixel-antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeLegibility !important;
   }
 
   /* Page layout adjustments */
