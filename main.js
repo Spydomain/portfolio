@@ -1,15 +1,10 @@
 import { generateAndOpenResumePDF } from './cv-generator.js';
 if (typeof window !== 'undefined') window.generateAndOpenResumePDF = generateAndOpenResumePDF;
 
-/* ── utilities ───────────────────────────────────── */
-const $ = s => document.querySelector(s);
-const $$ = s => document.querySelectorAll(s);
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const debounce = (fn, ms = 120) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
 
-function debounce(fn, ms = 120) {
-  let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
-}
-
-/* ── boot ────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   initMenu();
   initPages();
@@ -21,14 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* ══════════════════════════════════════════════════
    HAMBURGER MENU
-   Strategy: translateX the panel, never touch li/a
+   ─ Only the PANEL uses transform to show/hide.
+   ─ li and a elements are NEVER touched by JS.
+   ─ Class used: is-open  (avoids clash with old code)
 ══════════════════════════════════════════════════ */
 function initMenu() {
   const btn   = $('.hamburger');
   const panel = $('.nav-links');
   if (!btn || !panel) return;
 
-  /* guarantee overlay exists */
+  /* Create overlay if missing */
   let overlay = $('.nav-overlay');
   if (!overlay) {
     overlay = document.createElement('div');
@@ -36,45 +33,52 @@ function initMenu() {
     document.body.appendChild(overlay);
   }
 
-  /* CRITICAL: wipe every inline style JS may have set before */
+  /* ── CRITICAL: strip every inline style that old JS set ── */
   btn.removeAttribute('style');
   panel.removeAttribute('style');
-  /* also wipe any inline styles on li/a from previous broken attempts */
-  panel.querySelectorAll('li, a').forEach(el => el.removeAttribute('style'));
+  /* Strip from every li and a — old code set opacity/transform inline */
+  $$('.nav-links li, .nav-links a').forEach(el => {
+    el.removeAttribute('style');
+    el.style.cssText = ''; /* belt-and-suspenders */
+  });
 
-  let menuOpen = false;
+  let open = false;
 
-  function open() {
-    menuOpen = true;
-    btn.classList.add('open');
-    panel.classList.add('open');
-    overlay.classList.add('open');
+  function openMenu() {
+    open = true;
+    btn.classList.add('is-open');
+    panel.classList.add('is-open');
+    overlay.classList.add('is-open');
     document.body.style.overflow = 'hidden';
   }
 
-  function close() {
-    menuOpen = false;
-    btn.classList.remove('open');
-    panel.classList.remove('open');
-    overlay.classList.remove('open');
+  function closeMenu() {
+    open = false;
+    btn.classList.remove('is-open');
+    panel.classList.remove('is-open');
+    overlay.classList.remove('is-open');
     document.body.style.overflow = '';
   }
 
-  btn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); menuOpen ? close() : open(); });
-  overlay.addEventListener('click', close);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && menuOpen) close(); });
-
-  /* close when a link is tapped on mobile */
-  panel.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => { if (window.innerWidth <= 992) close(); });
+  btn.addEventListener('click', e => {
+    e.preventDefault(); e.stopPropagation();
+    open ? closeMenu() : openMenu();
   });
 
-  /* close + reset on resize to desktop */
+  overlay.addEventListener('click', closeMenu);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && open) closeMenu(); });
+
+  /* Close when any nav link is clicked on mobile */
+  $$('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => { if (window.innerWidth <= 992) closeMenu(); });
+  });
+
+  /* Reset cleanly when resizing to desktop */
   window.addEventListener('resize', debounce(() => {
     if (window.innerWidth > 992) {
-      close();
-      btn.removeAttribute('style');
+      closeMenu();
       panel.removeAttribute('style');
+      btn.removeAttribute('style');
     }
   }));
 }
@@ -83,7 +87,8 @@ function initMenu() {
    PAGE NAVIGATION
 ══════════════════════════════════════════════════ */
 function initPages() {
-  showPage(window.location.hash.slice(1) || 'home');
+  const hash = window.location.hash.slice(1);
+  showPage(hash || 'home');
 
   $$('[data-page]').forEach(el => {
     el.addEventListener('click', e => {
@@ -98,16 +103,12 @@ function initPages() {
 
 function showPage(id) {
   if (!id || !document.getElementById(id)) id = 'home';
-
   $$('.page').forEach(p => { p.classList.remove('active'); p.style.display = 'none'; });
-
   const page = document.getElementById(id);
   if (!page) return;
   page.style.display = 'block';
   page.classList.add('active');
-
   $$('.nav-links a').forEach(a => a.classList.toggle('active', a.getAttribute('data-page') === id));
-
   window.history.pushState({ id }, '', '#' + id);
   window.scrollTo(0, 0);
 }
@@ -143,8 +144,8 @@ function startMatrix() {
   }
   resize();
   window.addEventListener('resize', debounce(resize));
-
   ctx.font = FS + 'px monospace';
+
   setInterval(() => {
     ctx.fillStyle = 'rgba(0,0,0,0.15)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -162,19 +163,21 @@ function startMatrix() {
 ══════════════════════════════════════════════════ */
 function generateFavicon() {
   try {
-    const S = 64, c = document.createElement('canvas');
+    const S = 64;
+    const c = document.createElement('canvas');
     c.width = c.height = S;
     const x = c.getContext('2d');
     x.fillStyle = '#0b0f19'; x.fillRect(0, 0, S, S);
     const g = x.createRadialGradient(S/2,S/2,8,S/2,S/2,S/2);
     g.addColorStop(0,'#003322'); g.addColorStop(1,'#00110a');
     x.fillStyle = g; x.beginPath(); x.arc(S/2,S/2,S/2-2,0,Math.PI*2); x.fill();
-    x.fillStyle = 'rgba(0,255,153,0.2)'; x.font = 'bold 10px monospace';
+    x.fillStyle='rgba(0,255,153,0.2)'; x.font='bold 10px monospace';
     for (let y=10;y<S;y+=12) for (let i=6;i<S;i+=12) x.fillText(Math.random()>.5?'1':'0',i,y);
     x.font='bold 28px Roboto Mono,monospace'; x.fillStyle='#00ff99';
-    x.textAlign='center'; x.textBaseline='middle'; x.shadowColor='#00ff99'; x.shadowBlur=8;
-    x.fillText('BS',S/2,S/2+2);
-    $$('link[rel="icon"]').forEach(e=>e.remove());
+    x.textAlign='center'; x.textBaseline='middle';
+    x.shadowColor='#00ff99'; x.shadowBlur=8;
+    x.fillText('BS', S/2, S/2+2);
+    $$('link[rel="icon"]').forEach(e => e.remove());
     const lnk = document.createElement('link');
     lnk.rel='icon'; lnk.type='image/png'; lnk.href=c.toDataURL('image/png');
     document.head.appendChild(lnk);
@@ -200,21 +203,15 @@ function initTerminal() {
 - social         : Social media links
 - cv             : Download CV as PDF
 - clear          : Clear the terminal`,
-
     whoami: "I'm Bikash Sarraf, a Cybersecurity & Ethical Hacking Enthusiast from Kathmandu, Nepal. Currently studying at Softwarica College of IT and E-Commerce.",
-
     education:`🎓 Education:
 - BSc (Hons) Cybersecurity & Ethical Hacking
   Softwarica College, Kathmandu — Currently pursuing
-
 - +2 Science (Biology) | GPA: 3.08
   Xavier International College, Kalopul — 2024
-
 - SEE | GPA: 3.10
   Shree Sharaswasti English Boarding School, Bara — 2022`,
-
     experience: "💼 Currently seeking professional cybersecurity opportunities.",
-
     projects:`🚀 Projects:
 1. Keylogger (Python) — github.com/Spydomain/keylogger
 2. Bike Rental Nepal (Node+React) — github.com/Spydomain/front
@@ -222,18 +219,15 @@ function initTerminal() {
 4. ClipboardAI (Bash) — github.com/Spydomain/ClipboardAI
 5. NotesVista — notesvista.netlify.app
 6. FGE ID Platform (Flutter) — army-testgit-45113358-666ec.web.app`,
-
     contact:`📧 Contact:
 - Email:    bikashsarraf83@gmail.com
 - Location: Kathmandu, Nepal
 - LinkedIn: linkedin.com/in/bikash-sarraf-683787320
 - GitHub:   github.com/Spydomain`,
-
     social:`🌐 Social:
 - LinkedIn:  linkedin.com/in/bikash-sarraf-683787320
 - Instagram: instagram.com/bikash.sarraf.399
 - Facebook:  facebook.com/bikash.sarraf.399`,
-
     certifications:`🎓 Certifications:
 - Cisco Certified Ethical Hacker
 - TryHackMe Pre-Security & Cyber Security 101
@@ -242,7 +236,6 @@ function initTerminal() {
 - Google Cybersecurity Professional Certificate
 - CompTIA PenTest+ (PT0-002)
 - Certified API Security Analyst`,
-
     cv()    { generateAndOpenResumePDF(); return 'Opening CV…'; },
     clear() { out.innerHTML = ''; return ''; },
   };
@@ -257,21 +250,28 @@ function initTerminal() {
       : (out.scrollTop = out.scrollHeight, res());
     tick();
   });
-  const enq = (t,c) => { q = q.then(() => type(t,c)); };
+  const enq = (t, c) => { q = q.then(() => type(t, c)); };
 
   enq("Welcome to Bikash's Portfolio Terminal\nType 'help' to see available commands\n\n", 'welcome-message');
 
   inp.addEventListener('keydown', e => {
     if (e.key !== 'Enter') return;
     e.preventDefault();
-    const cmd = inp.value.trim(); if (!cmd) return;
-    const ln = document.createElement('div'); ln.className='command-line';
+    const cmd = inp.value.trim();
+    if (!cmd) return;
+    const ln = document.createElement('div');
+    ln.className = 'command-line';
     ln.innerHTML = `<span class="prompt">root@bikash#</span> ${cmd}`;
     out.appendChild(ln);
     const k = cmd.toLowerCase();
-    if (k in CMD) { const r = typeof CMD[k]==='function'?CMD[k]():CMD[k]; if(r) enq(r); }
-    else enq(`Command not found: ${cmd}\nType 'help' for available commands`, 'error-message');
-    inp.value = ''; out.scrollTop = out.scrollHeight;
+    if (k in CMD) {
+      const r = typeof CMD[k] === 'function' ? CMD[k]() : CMD[k];
+      if (r) enq(r);
+    } else {
+      enq(`Command not found: ${cmd}\nType 'help' for available commands`, 'error-message');
+    }
+    inp.value = '';
+    out.scrollTop = out.scrollHeight;
   });
 
   out.addEventListener('click', () => inp.focus());
