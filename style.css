@@ -14,6 +14,10 @@ body {
   display: flex; flex-direction: column;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  /* NO BLUR */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
 }
 
 img, video, canvas { max-width: 100%; height: auto; display: block; }
@@ -148,6 +152,10 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.85);
   z-index: 9998;
+  /* NO BLUR ON OVERLAY */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
 }
 .nav-overlay.is-open { display: block; }
 
@@ -181,23 +189,28 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     gap: 6px !important;
     padding: 76px 24px 24px !important;
     margin: 0 !important;
-    /* Visual — solid opaque color, NO backdrop-filter (causes blur bleed) */
+    /* Visual — SOLID BLACK, NO TRANSPARENCY, NO BLUR */
     background: #000000 !important;
     background-color: #000000 !important;
-    /* CRITICAL: Remove ALL blur filters */
+    /* CRITICAL: REMOVE ALL BLUR - EVERY VARIATION */
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     -moz-backdrop-filter: none !important;
     filter: none !important;
     -webkit-filter: none !important;
+    -moz-filter: none !important;
+    /* Ensure no inherited blur */
+    will-change: auto !important;
+    transform: translateX(-100%) !important;
+    backface-visibility: auto !important;
+    perspective: none !important;
     /* Font rendering */
     -webkit-font-smoothing: subpixel-antialiased !important;
     -moz-osx-font-smoothing: grayscale !important;
     text-rendering: optimizeLegibility !important;
     border-right: 2px solid #00ff99 !important;
     box-shadow: 6px 0 40px rgba(0,0,0,0.9) !important;
-    /* Slide behaviour — transform only, children always visible */
-    transform: translateX(-100%) !important;
+    /* Slide behaviour */
     transition: transform 0.3s cubic-bezier(0.4,0,0.2,1) !important;
     /* Z — must be above navbar blur layer */
     z-index: 9999 !important;
@@ -212,14 +225,13 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     transform: translateX(0) !important;
   }
 
-  /* ── li — 100% visible, always, no exceptions ── */
+  /* ── li — 100% SHARP AND CLEAR ── */
   .nav-links > li,
   .nav-links li {
     display: block !important;
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-    /* These MUST be set or the old broken CSS will override */
     opacity: 1 !important;
     visibility: visible !important;
     transform: none !important;
@@ -227,14 +239,22 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     animation: none !important;
     pointer-events: auto !important;
     list-style: none !important;
-    /* No hidden overflow that could clip text */
     overflow: visible !important;
     max-height: none !important;
     height: auto !important;
     min-height: 0 !important;
+    /* NO BLUR */
+    filter: none !important;
+    -webkit-filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    /* Font rendering */
+    -webkit-font-smoothing: subpixel-antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeLegibility !important;
   }
 
-  /* ── a — 100% visible, styled, always ── */
+  /* ── a — 100% SHARP AND CLEAR ── */
   .nav-links > li > a,
   .nav-links li a,
   .nav-links a {
@@ -244,7 +264,7 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     width: 100% !important;
     padding: 18px 22px !important;
     margin: 0 !important;
-    /* TEXT — maximum brightness, sharp rendering */
+    /* TEXT — MAXIMUM CLARITY */
     color: #00ff99 !important;
     -webkit-text-fill-color: #00ff99 !important;
     font-size: 1.1rem !important;
@@ -252,10 +272,10 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     text-decoration: none !important;
     letter-spacing: 0.05em !important;
     text-shadow: none !important;
-    /* Visibility — absolute, no tricks */
+    /* Visibility */
     opacity: 1 !important;
     visibility: visible !important;
-    /* Background — dark solid, no alpha blending issues */
+    /* Background */
     background: #061a0c !important;
     border: 1px solid rgba(0,255,153,0.6) !important;
     border-radius: 8px !important;
@@ -268,15 +288,20 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     font-style: normal !important;
     line-height: 1.4 !important;
     clip-path: none !important;
+    /* CRITICAL: NO BLUR OR FILTERS ON MENU ITEMS */
     filter: none !important;
-    /* CRITICAL: No blur effects at all */
+    -webkit-filter: none !important;
+    -moz-filter: none !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     -moz-backdrop-filter: none !important;
-    /* Font rendering optimization */
+    /* Font rendering for SHARP text */
     -webkit-font-smoothing: subpixel-antialiased !important;
     -moz-osx-font-smoothing: grayscale !important;
     text-rendering: optimizeLegibility !important;
+    /* No transforms that could cause blur */
+    transform: translateZ(0) !important;
+    will-change: background, box-shadow !important;
     transition: background 0.18s ease, box-shadow 0.18s ease !important;
   }
 
@@ -287,7 +312,9 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     color: #00ffcc !important;
     -webkit-text-fill-color: #00ffcc !important;
     filter: none !important;
+    -webkit-filter: none !important;
     backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
   .nav-links li a.active,
@@ -297,10 +324,12 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     color: #00ff99 !important;
     -webkit-text-fill-color: #00ff99 !important;
     filter: none !important;
+    -webkit-filter: none !important;
     backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
-  /* Icons inside links */
+  /* Icons inside links - MAXIMUM CLARITY */
   .nav-links a i,
   .nav-links li a i {
     color: #00ff99 !important;
@@ -310,10 +339,16 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     opacity: 1 !important;
     visibility: visible !important;
     filter: none !important;
-    /* Icon rendering optimization */
+    -webkit-filter: none !important;
+    -moz-filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    /* Icon rendering - MAXIMUM SHARPNESS */
     -webkit-font-smoothing: subpixel-antialiased !important;
     -moz-osx-font-smoothing: grayscale !important;
     text-rendering: optimizeLegibility !important;
+    /* Ensure no blur inheritance */
+    transform: translateZ(0) !important;
   }
 
   /* Page layout adjustments */
@@ -377,6 +412,10 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
 .page-container {
   flex: 1; position: relative; z-index: 1;
   padding-top: 80px; padding-bottom: 40px;
+  /* NO BLUR */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
 }
 
 .page {
