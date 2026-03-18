@@ -22,8 +22,10 @@ function updateFooterOffset() {
   } catch (_) { /* noop */ }
 }
 
+// ─────────────────────────────────────────────
 // Main application initialization
-document.addEventListener('DOMContentLoaded', function() {
+// ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
   initPages();
   initMenu();
   initContactForm();
@@ -35,148 +37,87 @@ document.addEventListener('DOMContentLoaded', function() {
   window.addEventListener('load', updateFooterOffset);
 });
 
-// Mobile menu functionality
+// ─────────────────────────────────────────────
+// Mobile menu
+// ─────────────────────────────────────────────
 function initMenu() {
   const hamburger = document.querySelector('.hamburger');
-  const navMenu = document.querySelector('.nav-links');
-  let navOverlay = document.querySelector('.nav-overlay');
+  const navMenu   = document.querySelector('.nav-links');
 
-  // Create overlay if it doesn't exist
+  // Create overlay if absent
+  let navOverlay = document.querySelector('.nav-overlay');
   if (!navOverlay) {
     navOverlay = document.createElement('div');
     navOverlay.className = 'nav-overlay';
     document.body.appendChild(navOverlay);
   }
 
-  // ── FIX: remove ALL inline styles so CSS has full control ──
+  if (!hamburger || !navMenu) return;
+
+  // Strip any leftover inline styles so CSS takes full control
   hamburger.removeAttribute('style');
 
-  // Close menu by default on page load
-  hamburger.classList.remove('active');
-  navMenu.classList.remove('show');
-  navOverlay.style.display = 'none';
+  // ── helpers ──────────────────────────────────
+  const isOpen = () => hamburger.classList.contains('active');
 
-  // Helper: apply only the safe transparent style string
-  const TRANSPARENT_STYLE = 'background:transparent!important;border:none!important;box-shadow:none!important;outline:none!important;';
-
-  // Function to close menu
-  const closeMenu = () => {
-    if (!hamburger.classList.contains('active')) return;
-
-    const menuItems = navMenu.querySelectorAll('li');
-    menuItems.forEach((item, index) => {
-      item.style.animation = `fadeOutRight 0.3s ease forwards ${index * 0.05}s`;
-    });
-
-    setTimeout(() => {
-      if (!hamburger.classList.contains('active')) return;
-
-      navMenu.classList.remove('show');
-      navOverlay.classList.remove('show');
-      document.body.style.overflow = '';
-
-      setTimeout(() => {
-        hamburger.classList.remove('active');
-        hamburger.style.cssText = TRANSPARENT_STYLE;
-        if (navOverlay) navOverlay.style.display = 'none';
-        menuItems.forEach(item => { item.style.animation = ''; });
-      }, 300);
-    }, 100);
-  };
-
-  // Function to open menu
-  const openMenu = () => {
-    if (hamburger.classList.contains('active')) return;
-
-    const openMenus = document.querySelectorAll('.nav-links.show');
-    openMenus.forEach(menu => { if (menu !== navMenu) menu.classList.remove('show'); });
-
-    navOverlay.style.display = 'block';
-    void navOverlay.offsetHeight; // force reflow
-
+  function openMenu() {
+    if (isOpen()) return;
     hamburger.classList.add('active');
     navMenu.classList.add('show');
-    navOverlay.classList.add('show');
+    navOverlay.classList.add('active');
+    navOverlay.style.display = 'block';
     document.body.style.overflow = 'hidden';
-
-    // Keep transparent even when active
-    hamburger.style.cssText = TRANSPARENT_STYLE;
-
-    const menuItems = navMenu.querySelectorAll('li');
-    menuItems.forEach((item, index) => {
-      item.style.animation = `fadeInRight 0.3s ease forwards ${index * 0.1}s`;
-    });
-  };
-
-  if (hamburger && navMenu) {
-    hamburger.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (hamburger.classList.contains('active')) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
-      return false;
-    });
-
-    if (navOverlay) navOverlay.onclick = null;
-    document.onclick = null;
-
-    navMenu.onclick = (e) => {
-      e.stopPropagation();
-      return false;
-    };
-
-    const navLinks = navMenu.querySelectorAll('a');
-    navLinks.forEach(link => {
-      link.onclick = (e) => {
-        e.stopPropagation();
-        return true;
-      };
-    });
-
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && hamburger.classList.contains('active')) {
-        closeMenu();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    function handleResize() {
-      const isDesktop = window.innerWidth > 992;
-      if (isDesktop) {
-        navMenu.classList.remove('show');
-        hamburger.classList.remove('active');
-        // Hide only via display; let CSS handle everything else
-        hamburger.style.cssText = 'display:none;';
-        if (navOverlay) {
-          navOverlay.style.display = 'none';
-          navOverlay.classList.remove('show');
-        }
-        document.body.style.overflow = '';
-      } else {
-        // ── FIX: show hamburger but NEVER set border/background inline ──
-        hamburger.style.cssText = 'display:flex;' + TRANSPARENT_STYLE;
-      }
-    }
-
-    // Initial setup
-    handleResize();
-    window.addEventListener('resize', handleResize);
-
-    window.addEventListener('beforeunload', () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('resize', handleResize);
-    });
   }
+
+  function closeMenu() {
+    if (!isOpen()) return;
+    hamburger.classList.remove('active');
+    navMenu.classList.remove('show');
+    navOverlay.classList.remove('active');
+    navOverlay.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  // ── hamburger click ───────────────────────────
+  hamburger.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    isOpen() ? closeMenu() : openMenu();
+  });
+
+  // ── overlay click closes menu ─────────────────
+  navOverlay.addEventListener('click', closeMenu);
+
+  // ── nav link clicks close menu ────────────────
+  navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 992) closeMenu();
+    });
+  });
+
+  // ── Escape key ────────────────────────────────
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen()) closeMenu();
+  });
+
+  // ── resize: reset state when going desktop ────
+  function handleResize() {
+    if (window.innerWidth > 992) {
+      closeMenu();
+      // CSS handles display; remove any leftover inline style
+      hamburger.removeAttribute('style');
+    }
+  }
+
+  window.addEventListener('resize', debounce(handleResize, 150));
 }
 
-// Generate a dynamic favicon (PNG) and inject as rel=icon at runtime
+// ─────────────────────────────────────────────
+// Favicon (dynamic, generated at runtime)
+// ─────────────────────────────────────────────
 function generateFavicon() {
   try {
-    const size = 64;
+    const size   = 64;
     const canvas = document.createElement('canvas');
     canvas.width = size;
     canvas.height = size;
@@ -184,6 +125,7 @@ function generateFavicon() {
 
     ctx.fillStyle = '#0b0f19';
     ctx.fillRect(0, 0, size, size);
+
     const grad = ctx.createRadialGradient(size/2, size/2, 8, size/2, size/2, size/2);
     grad.addColorStop(0, '#003322');
     grad.addColorStop(1, '#00110a');
@@ -194,122 +136,90 @@ function generateFavicon() {
 
     ctx.fillStyle = 'rgba(0,255,153,0.2)';
     ctx.font = 'bold 10px monospace';
-    for (let y = 10; y < size; y += 12) {
-      for (let x = 6; x < size; x += 12) {
+    for (let y = 10; y < size; y += 12)
+      for (let x = 6;  x < size; x += 12)
         ctx.fillText(Math.random() > 0.5 ? '1' : '0', x, y);
-      }
-    }
 
-    ctx.font = 'bold 28px Roboto Mono, monospace';
-    ctx.fillStyle = '#00ff99';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = '#00ff99';
-    ctx.shadowBlur = 8;
+    ctx.font          = 'bold 28px Roboto Mono, monospace';
+    ctx.fillStyle     = '#00ff99';
+    ctx.textAlign     = 'center';
+    ctx.textBaseline  = 'middle';
+    ctx.shadowColor   = '#00ff99';
+    ctx.shadowBlur    = 8;
     ctx.fillText('BS', size/2, size/2 + 2);
-    ctx.shadowBlur = 0;
+    ctx.shadowBlur    = 0;
 
     const url = canvas.toDataURL('image/png');
-
-    document.querySelectorAll('link[rel="icon"]').forEach(el => {
-      if (el.dataset && el.dataset.dynamic === 'true') el.remove();
-    });
-
+    document.querySelectorAll('link[rel="icon"][data-dynamic="true"]').forEach(el => el.remove());
     const link = document.createElement('link');
-    link.rel = 'icon';
-    link.type = 'image/png';
-    link.href = url;
+    link.rel             = 'icon';
+    link.type            = 'image/png';
+    link.href            = url;
     link.dataset.dynamic = 'true';
     document.head.appendChild(link);
-  } catch (e) {
-    // Fail silently; static favicon.svg will be used
-  }
+  } catch (e) { /* fallback to static favicon */ }
 }
 
-// Contact form submission
+// ─────────────────────────────────────────────
+// Contact form
+// ─────────────────────────────────────────────
 function initContactForm() {
   const contactForm = document.querySelector('.contact-form');
   if (!contactForm) return;
 
-  contactForm.addEventListener('submit', function(e) {
+  contactForm.addEventListener('submit', function (e) {
     e.preventDefault();
-
     fetch(contactForm.action, {
-      method: contactForm.method,
-      body: new FormData(contactForm),
+      method:  contactForm.method,
+      body:    new FormData(contactForm),
       headers: { 'Accept': 'application/json' },
-    }).then(response => {
-      if (response.ok) {
-        alert('Message sent successfully!');
-        contactForm.reset();
-      } else {
-        throw new Error('Network response was not ok');
-      }
-    }).catch(() => {
-      alert('Oops! There was a problem submitting your form');
-    });
+    })
+      .then(response => {
+        if (response.ok) {
+          alert('Message sent successfully!');
+          contactForm.reset();
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      })
+      .catch(() => alert('Oops! There was a problem submitting your form'));
   });
 }
 
+// ─────────────────────────────────────────────
 // Page Navigation
+// ─────────────────────────────────────────────
 function initPages() {
   const hash = window.location.hash.substring(1);
-  const defaultPage = hash || 'home';
-  showPage(defaultPage);
+  showPage(hash || 'home');
 
   document.querySelectorAll('[data-page]').forEach(link => {
-    link.addEventListener('click', function(e) {
+    link.addEventListener('click', function (e) {
       e.preventDefault();
       const pageId = this.getAttribute('data-page');
       showPage(pageId);
       window.history.pushState(null, '', `#${pageId}`);
-      const hamburger = document.querySelector('.hamburger');
-      const navMenu = document.querySelector('.nav-links');
-      const navOverlay = document.querySelector('.nav-overlay');
-      if (hamburger && navMenu) {
-        hamburger.classList.remove('active');
-        navMenu.classList.remove('show');
-        if (navOverlay) {
-          navOverlay.classList.remove('show');
-          navOverlay.style.display = 'none';
-        }
-        document.body.style.overflow = '';
-      }
     });
   });
 
-  window.addEventListener('popstate', function() {
+  window.addEventListener('popstate', () => {
     const hash = window.location.hash.substring(1) || 'home';
     showPage(hash);
   });
 
-  window.addEventListener('hashchange', function() {
+  window.addEventListener('hashchange', () => {
     const hash = window.location.hash.substring(1) || 'home';
     showPage(hash);
-    const hamburger = document.querySelector('.hamburger');
-    const navMenu = document.querySelector('.nav-links');
-    const navOverlay = document.querySelector('.nav-overlay');
-    if (hamburger && navMenu) {
-      hamburger.classList.remove('active');
-      navMenu.classList.remove('show');
-      if (navOverlay) {
-        navOverlay.classList.remove('show');
-        navOverlay.style.display = 'none';
-      }
-      document.body.style.overflow = '';
-    }
   });
 }
 
 function showPage(pageId) {
-  if (!pageId || !document.getElementById(pageId)) {
-    pageId = 'home';
-  }
+  if (!pageId || !document.getElementById(pageId)) pageId = 'home';
 
   document.querySelectorAll('.page').forEach(page => {
     page.classList.remove('active');
-    page.style.display = 'none';
-    page.style.opacity = '';
+    page.style.display    = 'none';
+    page.style.opacity    = '';
     page.style.visibility = '';
   });
 
@@ -320,9 +230,7 @@ function showPage(pageId) {
 
     document.querySelectorAll('.nav-links a').forEach(link => {
       link.classList.remove('active');
-      if (link.getAttribute('data-page') === pageId) {
-        link.classList.add('active');
-      }
+      if (link.getAttribute('data-page') === pageId) link.classList.add('active');
     });
 
     window.history.pushState({ pageId }, '', `#${pageId}`);
@@ -331,34 +239,33 @@ function showPage(pageId) {
   }
 }
 
+// ─────────────────────────────────────────────
 // Binary rain animation
+// ─────────────────────────────────────────────
 function startMatrix() {
   const canvas = document.getElementById('binary-rain');
   if (!canvas) return;
 
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  const ctx      = canvas.getContext('2d');
+  canvas.width   = window.innerWidth;
+  canvas.height  = window.innerHeight;
 
-  const binary = ['0', '1'];
+  const binary   = ['0', '1'];
   const fontSize = 16;
-  const columns = Math.floor(canvas.width / fontSize);
-  const drops = Array(columns).fill(1);
+  const columns  = Math.floor(canvas.width / fontSize);
+  const drops    = Array(columns).fill(1);
 
   ctx.font = fontSize + 'px monospace';
 
   function draw() {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
     ctx.fillStyle = '#39ff14';
+
     for (let i = 0; i < drops.length; i++) {
       const text = binary[Math.floor(Math.random() * binary.length)];
       ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-        drops[i] = 0;
-      }
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
       drops[i]++;
     }
   }
@@ -366,44 +273,108 @@ function startMatrix() {
   setInterval(draw, 40);
 
   window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
+    canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
   });
 }
 
-// Terminal functionality
+// ─────────────────────────────────────────────
+// Terminal
+// ─────────────────────────────────────────────
 function initTerminal() {
   const terminalOutput = document.getElementById('terminal-output');
   const terminalInput  = document.getElementById('terminal-input');
-
   if (!terminalOutput || !terminalInput) return;
 
   const commands = {
     help: `Available commands:
-- whoami      : Display information about me
-- education   : View my education background
-- experience  : View my work experience
-- projects    : View my projects
-- contact     : View contact information
-- cv          : Download my CV as PDF
-- clear       : Clear the terminal
+- whoami         : Display information about me
+- education      : View my education background
+- experience     : View my work experience
+- projects       : View my projects
+- contact        : View contact information
+- cv             : Download my CV as PDF
+- clear          : Clear the terminal
 - certifications : View my certifications
-- social      : View my social media links`,
-    whoami: 'I\'m Bikash Sarraf, a Cybersecurity & Ethical Hacking Enthusiast from Kathmandu, Nepal. I\'m currently studying at Softwarica College of IT and E-Commerce.',
-    education: '🎓 Education:\n- BSc (Hons) in Cybersecurity and Ethical Hacking\n  Softwarica College of IT and E-Commerce, Kathmandu\n  Currently pursuing\n\n- +2 Science (Biology)\n  Xavier International College, Kalopul, Kathmandu\n  Graduated: 2024 | GPA: 3.08\n\n- SEE\n  Shree Sharaswasti English Boarding School, Lipanimal-3, Bara\n  Graduated: 2022 | GPA: 3.10',
+- social         : View my social media links`,
+
+    whoami: "I'm Bikash Sarraf, a Cybersecurity & Ethical Hacking Enthusiast from Kathmandu, Nepal. I'm currently studying at Softwarica College of IT and E-Commerce.",
+
+    education: `🎓 Education:
+- BSc (Hons) in Cybersecurity and Ethical Hacking
+  Softwarica College of IT and E-Commerce, Kathmandu
+  Currently pursuing
+
+- +2 Science (Biology)
+  Xavier International College, Kalopul, Kathmandu
+  Graduated: 2024 | GPA: 3.08
+
+- SEE
+  Shree Sharaswasti English Boarding School, Lipanimal-3, Bara
+  Graduated: 2022 | GPA: 3.10`,
+
     experience: '💼 Experience:\nCurrently seeking opportunities to apply my cybersecurity and ethical hacking skills in a professional environment.',
-    projects: '🚀 Projects:\n1. Keylogger (Python)\n   - Created a keylogger using Python\n   - GitHub: github.com/Spydomain/keylogger\n\n2. Bike Rental Nepal (Node.js + React.js)\n   - Full-stack bike rental platform\n   - Frontend: github.com/Spydomain/front\n   - Backend: github.com/Spydomain/backend\n\n3. CVE-2023-22809 Automated Exploits (Python)\n   - Collection of automated exploits\n   - GitHub: github.com/Spydomain/CVE-2023-22809-automated-python-exploits\n\n4. ClipboardAI (Bash)\n   - AI-powered clipboard manager\n   - GitHub: github.com/Spydomain/ClipboardAI\n\n5. NotesVista (Node.js+React.js)\n   - Note-taking application\n   - Live: notesvista.netlify.app\n\n6. FGE Identification Test Platform (Flutter)\n   - French Army Vehicles/Weapons Identification application\n   - Live: https://army-testgit-45113358-666ec.web.app\n',
-    contact: '📧 Contact Information:\n- Email: bikashsarraf83@gmail.com\n- Location: Kathmandu, Nepal\n- LinkedIn: linkedin.com/in/bikash-sarraf-683787320\n- GitHub: github.com/Spydomain\n\nFeel free to reach out for collaborations or just to say hi!',
-    social: '🌐 Social Media:\n- LinkedIn: linkedin.com/in/bikash-sarraf-683787320\n- Instagram: instagram.com/bikash.sarraf.399\n- Facebook: facebook.com/bikash.sarraf.399',
-    certifications: '🎓 Certifications:\n- Cisco Certified Ethical Hacker\n- Tryhackme Pre-Security Certified\n- Tryhackme Cyber Security 101 Certified\n- Advent of cyber 2022 Certified\n- Advent of cyber 2023 Certified\n- Advent of cyber 2024 Certified\n- Certified Cybersecurity Educator Professional (CCEP)\n- Google Cybersecurity Professional Certificate\n- CompTIA PenTest+ (PT0-002)\n- Certified API Security Analyst',
-    cv: function() {
+
+    projects: `🚀 Projects:
+1. Keylogger (Python)
+   - Created a keylogger using Python
+   - GitHub: github.com/Spydomain/keylogger
+
+2. Bike Rental Nepal (Node.js + React.js)
+   - Full-stack bike rental platform
+   - Frontend: github.com/Spydomain/front
+   - Backend: github.com/Spydomain/backend
+
+3. CVE-2023-22809 Automated Exploits (Python)
+   - Collection of automated exploits
+   - GitHub: github.com/Spydomain/CVE-2023-22809-automated-python-exploits
+
+4. ClipboardAI (Bash)
+   - AI-powered clipboard manager
+   - GitHub: github.com/Spydomain/ClipboardAI
+
+5. NotesVista (Node.js+React.js)
+   - Note-taking application
+   - Live: notesvista.netlify.app
+
+6. FGE Identification Test Platform (Flutter)
+   - French Army Vehicles/Weapons Identification application
+   - Live: https://army-testgit-45113358-666ec.web.app`,
+
+    contact: `📧 Contact Information:
+- Email: bikashsarraf83@gmail.com
+- Location: Kathmandu, Nepal
+- LinkedIn: linkedin.com/in/bikash-sarraf-683787320
+- GitHub: github.com/Spydomain
+
+Feel free to reach out for collaborations or just to say hi!`,
+
+    social: `🌐 Social Media:
+- LinkedIn: linkedin.com/in/bikash-sarraf-683787320
+- Instagram: instagram.com/bikash.sarraf.399
+- Facebook: facebook.com/bikash.sarraf.399`,
+
+    certifications: `🎓 Certifications:
+- Cisco Certified Ethical Hacker
+- Tryhackme Pre-Security Certified
+- Tryhackme Cyber Security 101 Certified
+- Advent of cyber 2022 Certified
+- Advent of cyber 2023 Certified
+- Advent of cyber 2024 Certified
+- Certified Cybersecurity Educator Professional (CCEP)
+- Google Cybersecurity Professional Certificate
+- CompTIA PenTest+ (PT0-002)
+- Certified API Security Analyst`,
+
+    cv: function () {
       generateAndOpenResumePDF();
       return 'Opening CV in a new tab and starting download...';
     },
-    clear: function() {
+
+    clear: function () {
       terminalOutput.innerHTML = '';
       return '';
-    }
+    },
   };
 
   let typingQueue = Promise.resolve();
@@ -419,15 +390,13 @@ function initTerminal() {
 
       function type() {
         if (i < text.length) {
-          output.textContent += text.charAt(i);
-          i++;
+          output.textContent += text.charAt(i++);
           setTimeout(type, speed);
         } else {
           terminalOutput.scrollTop = terminalOutput.scrollHeight;
           resolve();
         }
       }
-
       type();
     });
   }
@@ -437,49 +406,44 @@ function initTerminal() {
     return typingQueue;
   }
 
-  function preloadTerminalMessage() {
-    const welcomeMsg = `Welcome to Bikash's Portfolio Terminal\nType 'help' to see available commands\n\n`;
-    enqueueType(welcomeMsg, 'welcome-message');
-  }
+  // Welcome message
+  enqueueType("Welcome to Bikash's Portfolio Terminal\nType 'help' to see available commands\n\n", 'welcome-message');
 
-  terminalInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const command = terminalInput.value.trim();
-
-      if (command) {
-        const commandLine = document.createElement('div');
-        commandLine.className = 'command-line';
-        commandLine.innerHTML = `<span class="prompt">root@bikash#</span> ${command}`;
-        terminalOutput.appendChild(commandLine);
-
-        const normalizedCmd = command.toLowerCase();
-
-        if (commands[normalizedCmd] !== undefined) {
-          if (typeof commands[normalizedCmd] === 'function') {
-            const result = commands[normalizedCmd]();
-            if (result) enqueueType(result);
-          } else {
-            enqueueType(commands[normalizedCmd]);
-          }
-        } else {
-          enqueueType(`Command not found: ${command}\nType 'help' to see available commands`, 'error-message');
-        }
-      }
-
-      terminalInput.value = '';
-      terminalOutput.scrollTop = terminalOutput.scrollHeight;
-    }
-  });
-
-  terminalOutput.addEventListener('click', () => { terminalInput.focus(); });
-
-  preloadTerminalMessage();
-
+  // Input prompt
   const initialPrompt = document.createElement('div');
   initialPrompt.className = 'command-line';
   initialPrompt.innerHTML = '<span class="prompt">root@bikash#</span> ';
   terminalOutput.appendChild(initialPrompt);
 
-  setTimeout(() => { terminalInput.focus(); }, 500);
+  terminalInput.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+
+    const command = terminalInput.value.trim();
+    if (!command) return;
+
+    const commandLine = document.createElement('div');
+    commandLine.className = 'command-line';
+    commandLine.innerHTML = `<span class="prompt">root@bikash#</span> ${command}`;
+    terminalOutput.appendChild(commandLine);
+
+    const normalizedCmd = command.toLowerCase();
+
+    if (commands[normalizedCmd] !== undefined) {
+      if (typeof commands[normalizedCmd] === 'function') {
+        const result = commands[normalizedCmd]();
+        if (result) enqueueType(result);
+      } else {
+        enqueueType(commands[normalizedCmd]);
+      }
+    } else {
+      enqueueType(`Command not found: ${command}\nType 'help' to see available commands`, 'error-message');
+    }
+
+    terminalInput.value = '';
+    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+  });
+
+  terminalOutput.addEventListener('click', () => terminalInput.focus());
+  setTimeout(() => terminalInput.focus(), 500);
 }
