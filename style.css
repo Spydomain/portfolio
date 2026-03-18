@@ -79,7 +79,7 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
   width: 40px; height: 40px; padding: 7px;
   cursor: pointer;
   background: none; border: none; outline: none; box-shadow: none;
-  position: fixed; top: 12px; left: 10px; z-index: 3000;
+  position: fixed; top: 12px; left: 10px; z-index: 10000;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -140,9 +140,8 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
 .nav-overlay {
   display: none;
   position: fixed; inset: 0;
-  background: rgba(0,0,0,0.82);
-  z-index: 2500;
-  backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.85);
+  z-index: 9998;
 }
 .nav-overlay.is-open { display: block; }
 
@@ -176,17 +175,22 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     gap: 6px !important;
     padding: 76px 12px 24px !important;
     margin: 0 !important;
-    /* Visual */
-    background: #010f06 !important;
-    border-right: 1px solid rgba(0,255,153,0.2) !important;
-    box-shadow: 6px 0 32px rgba(0,255,153,0.12) !important;
+    /* Visual — solid opaque color, NO backdrop-filter (causes blur bleed) */
+    background: #000000 !important;
+    background-color: #000000 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-right: 2px solid #00ff99 !important;
+    box-shadow: 6px 0 40px rgba(0,0,0,0.9) !important;
     /* Slide behaviour — transform only, children always visible */
     transform: translateX(-100%) !important;
     transition: transform 0.3s cubic-bezier(0.4,0,0.2,1) !important;
-    /* Z */
-    z-index: 2600 !important;
+    /* Z — must be above navbar blur layer */
+    z-index: 9999 !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
+    /* Isolate from parent stacking contexts */
+    isolation: isolate !important;
   }
 
   /* Slide in */
@@ -224,53 +228,51 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
     align-items: center !important;
     gap: 12px !important;
     width: 100% !important;
-    /* Generous padding so touch target is large */
-    padding: 14px 16px !important;
+    padding: 16px 18px !important;
     margin: 0 !important;
-    /* TEXT — bright green, guaranteed readable */
+    /* TEXT — maximum brightness, no transparency */
     color: #00ff99 !important;
-    font-size: 1rem !important;
-    font-weight: 600 !important;
+    -webkit-text-fill-color: #00ff99 !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
     text-decoration: none !important;
-    letter-spacing: 0.02em !important;
-    /* Make sure text actually renders */
+    letter-spacing: 0.04em !important;
+    text-shadow: 0 0 8px rgba(0,255,153,0.6) !important;
+    /* Visibility — absolute, no tricks */
     opacity: 1 !important;
     visibility: visible !important;
-    /* Background / border */
-    background: rgba(0,255,153,0.05) !important;
-    border: 1px solid rgba(0,255,153,0.18) !important;
+    /* Background — dark solid, no alpha blending issues */
+    background: #0a1f10 !important;
+    border: 1px solid #00ff99 !important;
     border-radius: 8px !important;
-    /* No clipping */
+    /* Layout */
     overflow: visible !important;
     white-space: nowrap !important;
     box-sizing: border-box !important;
-    /* No pointer hiding */
     pointer-events: auto !important;
-    /* Transition for hover only */
-    transition: background 0.18s ease, border-color 0.18s ease !important;
-    /* Reset anything that could hide text */
     text-indent: 0 !important;
     font-style: normal !important;
     line-height: 1.4 !important;
     clip-path: none !important;
-    -webkit-text-fill-color: #00ff99 !important;
-    text-shadow: none !important;
     filter: none !important;
+    /* No inherited blur */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transition: background 0.18s ease, box-shadow 0.18s ease !important;
   }
 
   .nav-links li a:hover,
   .nav-links a:hover {
-    background: rgba(0,255,153,0.14) !important;
-    border-color: rgba(0,255,153,0.45) !important;
+    background: #143d1e !important;
+    box-shadow: 0 0 12px rgba(0,255,153,0.4) !important;
     color: #00ffcc !important;
     -webkit-text-fill-color: #00ffcc !important;
   }
 
   .nav-links li a.active,
   .nav-links a.active {
-    background: rgba(0,255,153,0.12) !important;
-    border-left: 3px solid #00ff99 !important;
-    border-color: #00ff99 !important;
+    background: #0f2d18 !important;
+    border-left: 4px solid #00ff99 !important;
     color: #00ff99 !important;
     -webkit-text-fill-color: #00ff99 !important;
   }
@@ -280,10 +282,11 @@ img, video, canvas { max-width: 100%; height: auto; display: block; }
   .nav-links li a i {
     color: #00ff99 !important;
     -webkit-text-fill-color: #00ff99 !important;
-    min-width: 18px !important;
-    font-size: 1rem !important;
+    min-width: 20px !important;
+    font-size: 1.1rem !important;
     opacity: 1 !important;
     visibility: visible !important;
+    filter: none !important;
   }
 
   /* Page layout adjustments */
