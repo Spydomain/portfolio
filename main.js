@@ -69,11 +69,13 @@ function initMenu() {
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && open) closeMenu(); });
 
   /* Close when any nav link is clicked on mobile */
+  /* This handler works for both menu and desktop */
   $$('.nav-links a').forEach(a => {
     a.addEventListener('click', (e) => { 
       e.preventDefault();
       e.stopPropagation();
       const page = a.getAttribute('data-page');
+      console.log('Navigation clicked:', page); /* Debug log */
       if (page) {
         showPage(page);
       }
@@ -98,12 +100,8 @@ function initPages() {
   const hash = window.location.hash.slice(1);
   showPage(hash || 'home');
 
-  $$('[data-page]').forEach(el => {
-    el.addEventListener('click', e => {
-      e.preventDefault();
-      showPage(el.getAttribute('data-page'));
-    });
-  });
+  /* Navigation is handled by initMenu for menu links */
+  /* and by window hashchange listener below */
 
   window.addEventListener('popstate',   () => showPage(window.location.hash.slice(1) || 'home'));
   window.addEventListener('hashchange', () => showPage(window.location.hash.slice(1) || 'home'));
