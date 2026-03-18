@@ -70,7 +70,15 @@ function initMenu() {
 
   /* Close when any nav link is clicked on mobile */
   $$('.nav-links a').forEach(a => {
-    a.addEventListener('click', () => { if (window.innerWidth <= 992) closeMenu(); });
+    a.addEventListener('click', (e) => { 
+      e.preventDefault();
+      e.stopPropagation();
+      const page = a.getAttribute('data-page');
+      if (page) {
+        showPage(page);
+      }
+      if (window.innerWidth <= 992) closeMenu();
+    });
   });
 
   /* Reset cleanly when resizing to desktop */
