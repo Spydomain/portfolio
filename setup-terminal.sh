@@ -236,5 +236,5 @@ echo ""
 echo -e "${C}[4/4]${N} Dropping you into the Spydomain shell..."
 
 # 4. LAUNCH AS SPYDOMAIN
-# Switch user permanently — exec replaces the current shell process
-exec sudo -u Spydomain -i
+# Switch user permanently — force bash to explicitly load our .bashrc, bypassing global Google Cloud Shell prompt overrides
+exec sudo -u Spydomain bash --rcfile /home/Spydomain/.bashrc -i
