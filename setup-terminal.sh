@@ -145,9 +145,17 @@ Keep learning, keep hacking (ethically)! 🛡️
 EOF
 
 # 3. CREATE BASHRC FOR SPYDOMAIN
+cat > .bash_profile << 'BPROF'
+if [ -f ~/.bashrc ]; then
+    source ~/.bashrc
+fi
+BPROF
+
 cat > .bashrc << 'BASHRC'
 # ═══ Spydomain Terminal Config ═══
+unset PROMPT_COMMAND
 export PS1='\[\033[01;32m\]Spydomain@cloudshell\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+
 
 # Custom Commands
 ll() { ls -la --color=auto "$@"; }
