@@ -16,10 +16,6 @@ echo "  ║     🔒 Spydomain Terminal — Setting Up Environment    ║"
 echo "  ╚═══════════════════════════════════════════════════════╝"
 echo -e "${N}"
 
-# Auto-prime the sudo cache since the Cloud Shell user has an empty password.
-# This prevents invisible prompts from hanging the script.
-echo "" | sudo -S -v 2>/dev/null
-
 # ── Create Real Spydomain Linux User ──
 echo -e "${C}[1/4]${N} Creating isolated Debian Linux user 'Spydomain'..."
 if id "Spydomain" &>/dev/null; then

