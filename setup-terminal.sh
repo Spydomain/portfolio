@@ -10,6 +10,7 @@ set -e
 # Colors
 G='\033[0;32m'; C='\033[0;36m'; Y='\033[1;33m'; R='\033[0;31m'; B='\033[1m'; N='\033[0m'
 
+{
 clear
 echo -e "${G}${B}"
 echo "  ╔═══════════════════════════════════════════════════════╗"
@@ -30,9 +31,9 @@ fi
 # Ensure correct home directory ownership
 sudo chown -R Spydomain:Spydomain /home/Spydomain
 
-echo -e "${C}[2/4]${N} Generating portfolio data & cloning 22 GitHub projects..."
+echo -e "${C}[2/4]${N} Generating portfolio data..."
 
-# ── Execute File Generation & Cloning AS the Spydomain user ──
+# ── Execute File Generation AS the Spydomain user ──
 sudo -u Spydomain bash << 'SPYSETUP'
 set -e
 G='\033[0;32m'; Y='\033[1;33m'; R='\033[0;31m'; N='\033[0m'
@@ -148,46 +149,8 @@ cat > .secret << 'EOF'
 Keep learning, keep hacking (ethically)! 🛡️
 EOF
 
-# 2. CLONE GITHUB REPOS
-clone_repo() {
-  local repo="$1"
-  local dir="$SPYDIR/projects/$repo"
-  if [ ! -d "$dir" ]; then
-    echo -e "  ${G}→${N} Cloning $repo..."
-    git clone --depth 1 --quiet "https://github.com/Spydomain/$repo.git" "$dir" 2>/dev/null || \
-      echo -e "  ${R}✗${N} Failed to clone $repo (may be private or missing)"
-  fi
-}
-
-# Security & Exploit Tools
-clone_repo "keylogger"
-clone_repo "CVE-2023-22809-automated-python-exploits"
-clone_repo "CVE-2021-22555-Poc"
-clone_repo "CVE-2017-1000112-PoC"
-clone_repo "CVE-2022-0435-Poc"
-clone_repo "browser-data-stealer"
-clone_repo "python-bruteforce-login"
-clone_repo "GraphQL_Vulnerability_Scanner"
-clone_repo "Network-Artifact-Hunter"
-clone_repo "Ai-image-video-detection"
-clone_repo "filestore-reverse-shell-generator"
-clone_repo "bloggy-reverse-shell-generator"
-clone_repo "location-tracker"
-
-# AI & Development Tools
-clone_repo "ClipboardAI"
-clone_repo "gemini"
-
-# Web Applications
-clone_repo "front"
-clone_repo "backend"
-clone_repo "note-app"
-clone_repo "message-app"
-
-# Other
-clone_repo "ARMY-TEST"
-clone_repo "os-cw1-code"
-clone_repo "portfolio"
+# 2. GIT CLONING DISABLED PER USER REQUEST
+# Repositories are not automatically cloned.
 
 # 3. CREATE BASHRC FOR SPYDOMAIN
 cat > .bashrc << 'BASHRC'
@@ -247,6 +210,14 @@ help_spy() {
 }
 
 cd /home/Spydomain
+
+# Auto-display about me on login
+clear
+neofetch_spy
+echo ""
+myabout
+echo ""
+help_spy
 BASHRC
 SPYSETUP
 
@@ -258,12 +229,12 @@ echo -e "  ║             ✅ Debian Setup Complete!                   ║"
 echo -e "  ╠═══════════════════════════════════════════════════════╣"
 echo -e "  ║  Real User: Spydomain                                 ║"
 echo -e "  ║  Home Dir:  /home/Spydomain                           ║"
-echo -e "  ║  Projects:  $(sudo -u Spydomain ls /home/Spydomain/projects 2>/dev/null | wc -l) active Git repositories cloned         ║"
 echo -e "  ║                                                       ║"
 echo -e "  ║  Type 'help_spy' for available commands                ║"
 echo -e "  ╚═══════════════════════════════════════════════════════╝${N}"
 echo ""
 echo -e "${C}[4/4]${N} Dropping you into the Spydomain shell..."
+} > /dev/null 2>&1
 
 # 4. LAUNCH AS SPYDOMAIN
 # Switch user permanently replacing current process shell with the new login shell for 'Spydomain'
