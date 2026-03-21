@@ -1,0 +1,270 @@
+#!/bin/bash
+# ═══════════════════════════════════════════════════════
+#  Spydomain Portfolio Terminal Setup
+#  Auto-configures Google Debian Cloud Shell
+#  Creates a REAL Linux user "Spydomain" and adds details
+# ═══════════════════════════════════════════════════════
+
+set -e
+
+# Colors
+G='\033[0;32m'; C='\033[0;36m'; Y='\033[1;33m'; R='\033[0;31m'; B='\033[1m'; N='\033[0m'
+
+clear
+echo -e "${G}${B}"
+echo "  ╔═══════════════════════════════════════════════════════╗"
+echo "  ║     🔒 Spydomain Terminal — Setting Up Environment    ║"
+echo "  ╚═══════════════════════════════════════════════════════╝"
+echo -e "${N}"
+
+# ── Create Real Spydomain Linux User ──
+echo -e "${C}[1/4]${N} Creating isolated Debian Linux user 'Spydomain'..."
+if id "Spydomain" &>/dev/null; then
+    echo -e "  ${Y}→${N} User Spydomain already exists. Refreshing profile..."
+else
+    # Create the user with a home directory and bash as the default shell
+    sudo useradd -m -s /bin/bash Spydomain
+    echo -e "  ${G}→${N} User Spydomain created successfully."
+fi
+
+# Ensure correct home directory ownership
+sudo chown -R Spydomain:Spydomain /home/Spydomain
+
+echo -e "${C}[2/4]${N} Generating portfolio data & cloning 22 GitHub projects..."
+
+# ── Execute File Generation & Cloning AS the Spydomain user ──
+sudo -u Spydomain bash << 'SPYSETUP'
+set -e
+G='\033[0;32m'; Y='\033[1;33m'; R='\033[0;31m'; N='\033[0m'
+SPYDIR="/home/Spydomain"
+cd "$SPYDIR"
+mkdir -p projects certs tools docs .config
+
+# 1. PORTFOLIO FILES
+cat > about.txt << 'EOF'
+👤 About Me
+══════════════════════════════════════════════
+
+I am Bikash Sarraf, a passionate cybersecurity student based
+in Kathmandu, Nepal 🇳🇵. My journey in technology started
+with a deep curiosity about how systems work under the hood.
+
+I love participating in CTF challenges, discovering new
+security vulnerabilities, and contributing to open-source
+security tools. My ultimate goal is to become a highly
+skilled cybersecurity professional and ethical hacker.
+
+"The quieter you become, the more you can hear."
+EOF
+
+cat > whoami.txt << 'EOF'
+╔══════════════════════════════════════════════════════════╗
+║  Name:      Bikash Sarraf                                ║
+║  Alias:     Spydomain                                    ║
+║  Role:      Cybersecurity & Ethical Hacking Enthusiast    ║
+║  Location:  Kathmandu, Nepal 🇳🇵                          ║
+║  College:   Softwarica College of IT & E-Commerce        ║
+║  Email:     bikashsarraf83@gmail.com                     ║
+║  Website:   www.bikashkumarsarraf.com.np                 ║
+║  GitHub:    github.com/Spydomain                         ║
+╚══════════════════════════════════════════════════════════╝
+EOF
+
+cat > skills.txt << 'EOF'
+💻 Technical Skills
+══════════════════════════════════════════════
+
+Programming & Frameworks:
+  HTML/CSS        ████████████████░░░░ 75%
+  Python          ██████████████░░░░░░ 70%
+  JavaScript      █████████████░░░░░░░ 65%
+  Bash Scripting  █████████████░░░░░░░ 65%
+  React.js        ███████████░░░░░░░░░ 55%
+  C               ██████████░░░░░░░░░░ 50%
+  MySQL/PHP       █████████░░░░░░░░░░░ 45%
+
+Security & Hacking:
+  OSINT           ██████████████░░░░░░ 70%
+  Web AppSec      █████████████░░░░░░░ 65%
+  PenTesting      ████████████░░░░░░░░ 60%
+  Network Sec     ███████████░░░░░░░░░ 55%
+  Session Hijack  ██████████░░░░░░░░░░ 50%
+  Bug Bounty      █████████░░░░░░░░░░░ 45%
+
+Tools: Nmap, Burp Suite, Wireshark, Metasploit, Docker, Git
+EOF
+
+cat > education.txt << 'EOF'
+🎓 Education
+══════════════════════════════════════════════
+
+[2024 — Present]
+  BSc (Hons) Cybersecurity & Ethical Hacking
+  Softwarica College of IT & E-Commerce, Kathmandu
+
+[2022 — 2024]
+  +2 Science (Biology) | GPA: 3.08
+  Xavier International College, Kalopul, Kathmandu
+
+[2022]
+  SEE | GPA: 3.10
+  Shree Sharaswasti English Boarding School, Bara
+EOF
+
+cat > certs/certifications.txt << 'EOF'
+🏅 Certifications
+══════════════════════════════════════════════
+
+✅ Cisco Certified Ethical Hacker
+✅ TryHackMe Pre-Security
+✅ TryHackMe Cyber Security 101
+✅ TryHackMe Advent of Cyber 2022
+✅ TryHackMe Advent of Cyber 2023
+✅ TryHackMe Advent of Cyber 2024
+✅ Certified Cybersecurity Educator Professional (CCEP)
+✅ Google Cybersecurity Professional Certificate
+✅ CompTIA PenTest+ (PT0-002)
+✅ Certified API Security Analyst
+EOF
+
+cat > contact.txt << 'EOF'
+📧 Contact
+══════════════════════════════════════════════
+
+Email:      bikashsarraf83@gmail.com
+Website:    www.bikashkumarsarraf.com.np
+GitHub:     github.com/Spydomain
+LinkedIn:   linkedin.com/in/bikash-sarraf-683787320
+Instagram:  instagram.com/bikash.sarraf.399
+TryHackMe:  tryhackme.com/p/bikashsarraf
+HackTheBox: app.hackthebox.com/users/2178446
+Medium:     medium.com/@spydomain1
+EOF
+
+cat > .secret << 'EOF'
+🔐 You found the secret file!
+"The quieter you become, the more you can hear."
+  — Ram Dass (adapted for hackers)
+Keep learning, keep hacking (ethically)! 🛡️
+EOF
+
+# 2. CLONE GITHUB REPOS
+clone_repo() {
+  local repo="$1"
+  local dir="$SPYDIR/projects/$repo"
+  if [ ! -d "$dir" ]; then
+    echo -e "  ${G}→${N} Cloning $repo..."
+    git clone --depth 1 --quiet "https://github.com/Spydomain/$repo.git" "$dir" 2>/dev/null || \
+      echo -e "  ${R}✗${N} Failed to clone $repo (may be private or missing)"
+  fi
+}
+
+# Security & Exploit Tools
+clone_repo "keylogger"
+clone_repo "CVE-2023-22809-automated-python-exploits"
+clone_repo "CVE-2021-22555-Poc"
+clone_repo "CVE-2017-1000112-PoC"
+clone_repo "CVE-2022-0435-Poc"
+clone_repo "browser-data-stealer"
+clone_repo "python-bruteforce-login"
+clone_repo "GraphQL_Vulnerability_Scanner"
+clone_repo "Network-Artifact-Hunter"
+clone_repo "Ai-image-video-detection"
+clone_repo "filestore-reverse-shell-generator"
+clone_repo "bloggy-reverse-shell-generator"
+clone_repo "location-tracker"
+
+# AI & Development Tools
+clone_repo "ClipboardAI"
+clone_repo "gemini"
+
+# Web Applications
+clone_repo "front"
+clone_repo "backend"
+clone_repo "note-app"
+clone_repo "message-app"
+
+# Other
+clone_repo "ARMY-TEST"
+clone_repo "os-cw1-code"
+clone_repo "portfolio"
+
+# 3. CREATE BASHRC FOR SPYDOMAIN
+cat > .bashrc << 'BASHRC'
+# ═══ Spydomain Terminal Config ═══
+export PS1='\[\033[01;32m\]Spydomain@debian\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+
+# Aliases
+alias ll='ls -la --color=auto'
+alias la='ls -A --color=auto'
+alias l='ls -CF --color=auto'
+alias cls='clear'
+alias myabout='cat ~/about.txt'
+alias myinfo='cat ~/whoami.txt'
+alias myskills='cat ~/skills.txt'
+alias myedu='cat ~/education.txt'
+alias myprojects='ls -l ~/projects/'
+alias mycerts='cat ~/certs/certifications.txt'
+alias mycontact='cat ~/contact.txt'
+
+neofetch_spy() {
+    echo ""
+    echo -e "\033[0;32m       ▄▄▄▄▄▄▄▄▄▄▄       \033[1;37mSpydomain@debian"
+    echo -e "\033[0;32m   ▄▀░░░░░░░░░░░░░▀▄     \033[0;32m─────────────────"
+    echo -e "\033[0;32m  █░░░░░░░░░░░░░░░░░█    \033[1;37mOS:\033[0m Debian GNU/Linux (Google Cloud Shell)"
+    echo -e "\033[0;32m █░░░░░░░░░░░░░░░░░░░█   \033[1;37mUser:\033[0m $(whoami)"
+    echo -e "\033[0;32m █░░▄▀▀▀▀▀▀▀▀▄░░░░░░░█   \033[1;37mKernel:\033[0m $(uname -r)"
+    echo -e "\033[0;32m █░█  🔒  🛡️  █░░░░░░█   \033[1;37mUptime:\033[0m $(uptime -p 2>/dev/null || echo 'N/A')"
+    echo -e "\033[0;32m █░█         █░░░░░░░█   \033[1;37mShell:\033[0m $SHELL"
+    echo -e "\033[0;32m █░░▀▄▄▄▄▄▄▄▀░░░░░░░░█   \033[1;37mPython:\033[0m $(python3 --version 2>&1 | cut -d' ' -f2)"
+    echo -e "\033[0;32m  █░░░░░░░░░░░░░░░░░█    \033[1;37mNode:\033[0m $(node --version 2>/dev/null || echo 'N/A')"
+    echo -e "\033[0;32m   ▀▄░░░░░░░░░░░░░▀▄     \033[1;37mDocker:\033[0m $(docker --version 2>/dev/null | cut -d' ' -f3 | tr -d ',' || echo 'N/A')"
+    echo -e "\033[0;32m     ▀▀▀▀▀▀▀▀▀▀▀▀▀       \033[1;37mGit:\033[0m $(git --version 2>/dev/null | cut -d' ' -f3)"
+    echo -e "\033[0;32m                          \033[1;37mProjects:\033[0m $(ls ~/projects/ 2>/dev/null | wc -l) repos cloned"
+    echo -e "\033[0m"
+}
+alias neofetch='neofetch_spy'
+
+help_spy() {
+    echo -e "\033[1;32m"
+    echo "╔═══════════════════════════════════════════════════════╗"
+    echo "║         Spydomain Terminal — Quick Reference          ║"
+    echo "╠═══════════════════════════════════════════════════════╣"
+    echo "║  myabout     → Read about Bikash's journey            ║"
+    echo "║  myinfo      → Quick ID & Profile info                ║"
+    echo "║  myskills    → Technical skills overview              ║"
+    echo "║  myedu       → Education background                  ║"
+    echo "║  myprojects  → List all cloned GitHub projects        ║"
+    echo "║  mycerts     → 10 cybersecurity certifications        ║"
+    echo "║  mycontact   → Contact info & social links            ║"
+    echo "║  neofetch    → System info display                    ║"
+    echo "║  help_spy    → This help message                      ║"
+    echo "║                                                       ║"
+    echo "║  📂 Browse projects: cd ~/projects/<name>             ║"
+    echo "║  🔧 Tools available: python3, node, docker, nmap, git ║"
+    echo "╚═══════════════════════════════════════════════════════╝"
+    echo -e "\033[0m"
+}
+
+cd /home/Spydomain
+BASHRC
+SPYSETUP
+
+echo -e "${C}[3/4]${N} User environment populated successfully."
+
+echo ""
+echo -e "${G}${B}  ╔═══════════════════════════════════════════════════════╗"
+echo -e "  ║             ✅ Debian Setup Complete!                   ║"
+echo -e "  ╠═══════════════════════════════════════════════════════╣"
+echo -e "  ║  Real User: Spydomain                                 ║"
+echo -e "  ║  Home Dir:  /home/Spydomain                           ║"
+echo -e "  ║  Projects:  $(sudo -u Spydomain ls /home/Spydomain/projects 2>/dev/null | wc -l) active Git repositories cloned         ║"
+echo -e "  ║                                                       ║"
+echo -e "  ║  Type 'help_spy' for available commands                ║"
+echo -e "  ╚═══════════════════════════════════════════════════════╝${N}"
+echo ""
+echo -e "${C}[4/4]${N} Dropping you into the Spydomain shell..."
+
+# 4. LAUNCH AS SPYDOMAIN
+# Switch user permanently replacing current process shell with the new login shell for 'Spydomain'
+exec sudo -u Spydomain -i

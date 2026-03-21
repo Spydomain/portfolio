@@ -1,4 +1,5 @@
 import { generateAndOpenResumePDF } from './cv-generator.js';
+import { initSpyBot } from './spybot.js';
 if (typeof window !== 'undefined') window.generateAndOpenResumePDF = generateAndOpenResumePDF;
 
 const $  = s => document.querySelector(s);
@@ -12,20 +13,135 @@ document.addEventListener('DOMContentLoaded', () => {
   startMatrix();
   initTerminal();
   generateFavicon();
+  initScrollProgress();
+  initRevealAnimations();
+  initStatCounters();
+  initSkillBars();
+  // Lazy-init SpyBot AI after initial paint for faster page load
+  setTimeout(initSpyBot, 1500);
 });
+
+function initScrollProgress() {
+  const progress = document.getElementById('scroll-progress');
+  if (!progress) return;
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        const s = document.documentElement.scrollTop;
+        const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        if (h > 0) progress.style.width = (s / h * 100) + '%';
+        ticking = false;
+      });
+    }
+  }, { passive: true });
+}
+
+/* ══════════════════════════════════════════════════
+   REVEAL ANIMATIONS (Intersection Observer)
+══════════════════════════════════════════════════ */
+function initRevealAnimations() {
+  const cards = $$('.reveal-card');
+  if (!cards.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  cards.forEach(card => observer.observe(card));
+}
+
+/* trigger reveals when page switches (since pages are display:none initially) */
+function triggerPageReveals(pageId) {
+  const page = document.getElementById(pageId);
+  if (!page) return;
+  
+  // Small delay for the page to become visible
+  setTimeout(() => {
+    const cards = page.querySelectorAll('.reveal-card');
+    cards.forEach((card, i) => {
+      setTimeout(() => card.classList.add('visible'), i * 80);
+    });
+    
+    // Trigger skill bars if on skills page
+    if (pageId === 'skills') {
+      animateSkillBars(page);
+    }
+  }, 100);
+}
+
+/* ══════════════════════════════════════════════════
+   STAT COUNTERS
+══════════════════════════════════════════════════ */
+function initStatCounters() {
+  const counters = $$('.stat-number[data-target]');
+  if (!counters.length) return;
+
+  let animated = false;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !animated) {
+        animated = true;
+        counters.forEach(counter => animateCounter(counter));
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+
+  counters.forEach(c => observer.observe(c));
+}
+
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target, 10);
+  const duration = 1500;
+  const start = performance.now();
+
+  function tick(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    // easeOutCubic
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(target * eased);
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ══════════════════════════════════════════════════
+   SKILL BARS
+══════════════════════════════════════════════════ */
+function initSkillBars() {
+  // Will be triggered on page switch
+}
+
+function animateSkillBars(container) {
+  const fills = container.querySelectorAll('.skill-bar-fill[data-width]');
+  fills.forEach((fill, i) => {
+    setTimeout(() => {
+      fill.classList.add('animated');
+      fill.style.width = fill.dataset.width + '%';
+    }, i * 120);
+  });
+}
 
 /* ══════════════════════════════════════════════════
    HAMBURGER MENU
-   ─ Only the PANEL uses transform to show/hide.
-   ─ li and a elements are NEVER touched by JS.
-   ─ Class used: is-open  (avoids clash with old code)
 ══════════════════════════════════════════════════ */
 function initMenu() {
   const btn   = $('.hamburger');
   const panel = $('.nav-links');
   if (!btn || !panel) return;
 
-  /* Create overlay if missing */
   let overlay = $('.nav-overlay');
   if (!overlay) {
     overlay = document.createElement('div');
@@ -33,13 +149,11 @@ function initMenu() {
     document.body.appendChild(overlay);
   }
 
-  /* ── CRITICAL: strip every inline style that old JS set ── */
   btn.removeAttribute('style');
   panel.removeAttribute('style');
-  /* Strip from every li and a — old code set opacity/transform inline */
   $$('.nav-links li, .nav-links a').forEach(el => {
     el.removeAttribute('style');
-    el.style.cssText = ''; /* belt-and-suspenders */
+    el.style.cssText = '';
   });
 
   let open = false;
@@ -49,6 +163,7 @@ function initMenu() {
     btn.classList.add('is-open');
     panel.classList.add('is-open');
     overlay.classList.add('is-open');
+    document.body.classList.add('menu-open');
     document.body.style.overflow = 'hidden';
   }
 
@@ -57,6 +172,7 @@ function initMenu() {
     btn.classList.remove('is-open');
     panel.classList.remove('is-open');
     overlay.classList.remove('is-open');
+    document.body.classList.remove('menu-open');
     document.body.style.overflow = '';
   }
 
@@ -68,22 +184,18 @@ function initMenu() {
   overlay.addEventListener('click', closeMenu);
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && open) closeMenu(); });
 
-  /* Close when any nav link is clicked on mobile */
-  /* This handler works for both menu and desktop */
-  $$('.nav-links a').forEach(a => {
-    a.addEventListener('click', (e) => { 
-      e.preventDefault();
-      e.stopPropagation();
-      const page = a.getAttribute('data-page');
-      console.log('Navigation clicked:', page); /* Debug log */
-      if (page) {
-        showPage(page);
-      }
-      if (window.innerWidth <= 992) closeMenu();
-    });
+  document.addEventListener('click', e => {
+    const el = e.target.closest('[data-page]');
+    if (!el) return;
+    
+    e.preventDefault();
+    const page = el.getAttribute('data-page');
+    if (page) {
+      showPage(page);
+    }
+    if (window.innerWidth <= 992) closeMenu();
   });
 
-  /* Reset cleanly when resizing to desktop */
   window.addEventListener('resize', debounce(() => {
     if (window.innerWidth > 992) {
       closeMenu();
@@ -100,9 +212,6 @@ function initPages() {
   const hash = window.location.hash.slice(1);
   showPage(hash || 'home');
 
-  /* Navigation is handled by initMenu for menu links */
-  /* and by window hashchange listener below */
-
   window.addEventListener('popstate',   () => showPage(window.location.hash.slice(1) || 'home'));
   window.addEventListener('hashchange', () => showPage(window.location.hash.slice(1) || 'home'));
 }
@@ -117,6 +226,9 @@ function showPage(id) {
   $$('.nav-links a').forEach(a => a.classList.toggle('active', a.getAttribute('data-page') === id));
   window.history.pushState({ id }, '', '#' + id);
   window.scrollTo(0, 0);
+  
+  // Trigger reveal animations for the new page
+  triggerPageReveals(id);
 }
 
 /* ══════════════════════════════════════════════════
@@ -139,9 +251,12 @@ function initContactForm() {
 function startMatrix() {
   const canvas = document.getElementById('binary-rain');
   if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { alpha: false });
   const FS = 16;
   let drops = [];
+  const FPS = 24; // lower fps for performance — still looks smooth
+  const FRAME_MS = 1000 / FPS;
+  let lastFrame = 0;
 
   function resize() {
     canvas.width  = window.innerWidth;
@@ -152,16 +267,22 @@ function startMatrix() {
   window.addEventListener('resize', debounce(resize));
   ctx.font = FS + 'px monospace';
 
-  setInterval(() => {
+  function draw(now) {
+    requestAnimationFrame(draw);
+    if (now - lastFrame < FRAME_MS) return;
+    lastFrame = now;
+
     ctx.fillStyle = 'rgba(0,0,0,0.15)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = '#39ff14';
-    drops.forEach((y, i) => {
-      ctx.fillText(Math.random() > 0.5 ? '1' : '0', i * FS, y * FS);
-      if (y * FS > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    const len = drops.length;
+    for (let i = 0; i < len; i++) {
+      ctx.fillText(Math.random() > 0.5 ? '1' : '0', i * FS, drops[i] * FS);
+      if (drops[i] * FS > canvas.height && Math.random() > 0.975) drops[i] = 0;
       drops[i]++;
-    });
-  }, 40);
+    }
+  }
+  requestAnimationFrame(draw);
 }
 
 /* ══════════════════════════════════════════════════
@@ -207,9 +328,18 @@ function initTerminal() {
 - contact        : Contact info
 - certifications : My certifications
 - social         : Social media links
+- skills         : Technical skills
+- ls             : List virtual files
+- cat [file]     : Read virtual files
+- pwd            : Print working directory
+- uname          : System information
+- date           : Current date/time
+- uptime         : System uptime
+- history        : Command history
+- neofetch       : System info display
 - cv             : Download CV as PDF
 - clear          : Clear the terminal`,
-    whoami: "I'm Bikash Sarraf, a Cybersecurity & Ethical Hacking Enthusiast from Kathmandu, Nepal. Currently studying at Softwarica College of IT and E-Commerce.",
+    whoami: "I'm Bikash Sarraf (Spydomain), a Cybersecurity & Ethical Hacking Enthusiast from Kathmandu, Nepal. Currently studying at Softwarica College of IT and E-Commerce.",
     education:`🎓 Education:
 - BSc (Hons) Cybersecurity & Ethical Hacking
   Softwarica College, Kathmandu — Currently pursuing
@@ -224,7 +354,8 @@ function initTerminal() {
 3. CVE-2023-22809 Exploits — github.com/Spydomain/CVE-2023-22809-automated-python-exploits
 4. ClipboardAI (Bash) — github.com/Spydomain/ClipboardAI
 5. NotesVista — notesvista.netlify.app
-6. FGE ID Platform (Flutter) — army-testgit-45113358-666ec.web.app`,
+6. NebullaComms — nebullacomms.netlify.app
+7. FGE ID Platform (Flutter) — army-testgit-45113358-666ec.web.app`,
     contact:`📧 Contact:
 - Email:    bikashsarraf83@gmail.com
 - Location: Kathmandu, Nepal
@@ -233,7 +364,25 @@ function initTerminal() {
     social:`🌐 Social:
 - LinkedIn:  linkedin.com/in/bikash-sarraf-683787320
 - Instagram: instagram.com/bikash.sarraf.399
-- Facebook:  facebook.com/bikash.sarraf.399`,
+- Medium:    medium.com/@spydomain1
+- HackTheBox: app.hackthebox.com/users/2178446
+- TryHackMe: tryhackme.com/p/bikashsarraf`,
+    skills:`💻 Technical Skills:
+━━━ Languages ━━━
+  HTML/CSS ████████████████░░░░ 75%
+  Python   ██████████████░░░░░░ 70%
+  JS/Node  █████████████░░░░░░░ 65%
+  React.js ███████████░░░░░░░░░ 55%
+  C        ██████████░░░░░░░░░░ 50%
+  Bash     █████████████░░░░░░░ 65%
+  PHP/SQL  █████████░░░░░░░░░░░ 45%
+
+━━━ Security ━━━
+  OSINT        ██████████████░░░░░░ 70%
+  PenTesting   ████████████░░░░░░░░ 60%
+  Web AppSec   █████████████░░░░░░░ 65%
+  Network Sec  ███████████░░░░░░░░░ 55%
+  Bug Bounty   █████████░░░░░░░░░░░ 45%`,
     certifications:`🎓 Certifications:
 - Cisco Certified Ethical Hacker
 - TryHackMe Pre-Security & Cyber Security 101
@@ -242,9 +391,53 @@ function initTerminal() {
 - Google Cybersecurity Professional Certificate
 - CompTIA PenTest+ (PT0-002)
 - Certified API Security Analyst`,
-    cv()    { generateAndOpenResumePDF(); return 'Opening CV…'; },
+    ls: "whoami.txt  education.txt  experience.txt  projects.txt  contact.txt  certifications.txt  social.txt  skills.txt  .secret",
+    pwd: "/home/spydomain",
+    uname: "SpydomainOS 6.1.0-cyber x86_64 GNU/Linux",
+    hostname: "spydomain-portfolio",
+    id: "uid=1337(spydomain) gid=1337(hackers) groups=1337(hackers),27(sudo)",
+    uptime() {
+      const hours = Math.floor(Math.random() * 72) + 1;
+      const mins = Math.floor(Math.random() * 60);
+      return ` ${new Date().toLocaleTimeString()} up ${hours}:${String(mins).padStart(2,'0')}, 1 user, load average: 0.42, 0.31, 0.28`;
+    },
+    neofetch() {
+      return `       ▄▄▄▄▄▄▄▄▄▄▄       spydomain@portfolio
+   ▄▀░░░░░░░░░░░░░▀▄     ─────────────────
+  █░░░░░░░░░░░░░░░░░█    OS: SpydomainOS 6.1.0-cyber
+ █░░░░░░░░░░░░░░░░░░░█   Host: GitHub Pages
+ █░░▄▀▀▀▀▀▀▀▀▄░░░░░░░█   Kernel: web-5.15.x
+ █░█  🔒  🛡️  █░░░░░░█   Uptime: Always On
+ █░█         █░░░░░░░█   Shell: portfolio-sh
+ █░░▀▄▄▄▄▄▄▄▀░░░░░░░░█   DE: CyberSec Theme
+  █░░░░░░░░░░░░░░░░░█    Terminal: xterm-256color
+   ▀▄░░░░░░░░░░░░░▀▄     Resolution: ∞ × ∞
+     ▀▀▀▀▀▀▀▀▀▀▀▀▀       CPU: Neural Engine v3
+                          Memory: 1337MB / ∞MB`;
+    },
+    cat(args) {
+      if (!args) return "Usage: cat [filename]";
+      if (args === '.secret') return "🔐 Nice try! But the secrets are encrypted. Try harder! 😎";
+      const f = args.toLowerCase().replace('.txt','');
+      const alias = { 'about':'whoami', 'me':'whoami' };
+      const key = alias[f] || f;
+      if (key in CMD && typeof CMD[key] === 'string') return CMD[key];
+      if (key in CMD && typeof CMD[key] === 'function') return CMD[key]();
+      return `cat: ${args}: No such file or directory`;
+    },
+    date()  { return new Date().toString(); },
+    echo(a) { return a || ''; },
+    cv()    { 
+      enq('Generating PDF and opening CV...'); 
+      setTimeout(() => generateAndOpenResumePDF(), 800); 
+      return ''; 
+    },
     clear() { out.innerHTML = ''; return ''; },
   };
+
+  // Command history
+  const cmdHistory = [];
+  let historyIdx = -1;
 
   let q = Promise.resolve();
   const type = (text, cls='command-output') => new Promise(res => {
@@ -258,20 +451,74 @@ function initTerminal() {
   });
   const enq = (t, c) => { q = q.then(() => type(t, c)); };
 
-  enq("Welcome to Bikash's Portfolio Terminal\nType 'help' to see available commands\n\n", 'welcome-message');
+  enq("Welcome to Spydomain's Portfolio Terminal\nType 'help' to see available commands\n\n", 'welcome-message');
 
   inp.addEventListener('keydown', e => {
+    // Tab completion
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const val = inp.value.trim();
+      if (!val) return;
+      const parts = val.split(' ');
+      const cmds = Object.keys(CMD);
+      const files = ["whoami.txt", "education.txt", "experience.txt", "projects.txt", "contact.txt", "certifications.txt", "social.txt", "skills.txt", ".secret"];
+      
+      let matches = [];
+      if (parts.length === 1) {
+        matches = cmds.filter(c => c.startsWith(parts[0].toLowerCase()));
+      } else if (parts[0].toLowerCase() === 'cat') {
+        matches = files.filter(f => f.startsWith(parts[1].toLowerCase()));
+      }
+
+      if (matches.length === 1) {
+        inp.value = (parts.length === 1) ? matches[0] + ' ' : parts[0] + ' ' + matches[0];
+      }
+    }
+
+    // Arrow up/down for history
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (cmdHistory.length > 0 && historyIdx < cmdHistory.length - 1) {
+        historyIdx++;
+        inp.value = cmdHistory[cmdHistory.length - 1 - historyIdx];
+      }
+      return;
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIdx > 0) {
+        historyIdx--;
+        inp.value = cmdHistory[cmdHistory.length - 1 - historyIdx];
+      } else {
+        historyIdx = -1;
+        inp.value = '';
+      }
+      return;
+    }
+
     if (e.key !== 'Enter') return;
     e.preventDefault();
     const cmd = inp.value.trim();
     if (!cmd) return;
+
+    // Add to history
+    cmdHistory.push(cmd);
+    historyIdx = -1;
+
     const ln = document.createElement('div');
     ln.className = 'command-line';
-    ln.innerHTML = `<span class="prompt">root@bikash#</span> ${cmd}`;
+    ln.innerHTML = `<span class="prompt">Bikash@Spydomain#</span> ${cmd}`;
     out.appendChild(ln);
-    const k = cmd.toLowerCase();
-    if (k in CMD) {
-      const r = typeof CMD[k] === 'function' ? CMD[k]() : CMD[k];
+    const parts = cmd.split(' ');
+    const k = parts[0].toLowerCase();
+    const args = parts.slice(1).join(' ');
+
+    // Special command: history
+    if (k === 'history') {
+      const histStr = cmdHistory.map((c, i) => `  ${i + 1}  ${c}`).join('\n');
+      enq(histStr);
+    } else if (k in CMD) {
+      const r = typeof CMD[k] === 'function' ? CMD[k](args) : CMD[k];
       if (r) enq(r);
     } else {
       enq(`Command not found: ${cmd}\nType 'help' for available commands`, 'error-message');
@@ -280,6 +527,10 @@ function initTerminal() {
     out.scrollTop = out.scrollHeight;
   });
 
-  out.addEventListener('click', () => inp.focus());
+  document.addEventListener('click', e => {
+    if (e.target.closest('#terminal') || e.target.closest('#terminal-output')) {
+      inp.focus();
+    }
+  });
   setTimeout(() => inp.focus(), 500);
 }
