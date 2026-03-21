@@ -25,8 +25,10 @@ else
     echo -e "  ${G}→${N} User Spydomain created successfully."
 fi
 
-# Ensure correct home directory ownership
-sudo chown -R Spydomain:Spydomain /home/Spydomain 2>/dev/null
+# ALWAYS ensure correct home directory exists and has ownership 
+# (Google Cloud Shell wipes /home/Spydomain on VM restart)
+sudo mkdir -p /home/Spydomain
+sudo chown -R Spydomain:Spydomain /home/Spydomain
 
 echo -e "${C}[2/4]${N} Generating portfolio data..."
 
