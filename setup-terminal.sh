@@ -2,15 +2,13 @@
 # ═══════════════════════════════════════════════════════
 #  Spydomain Portfolio Terminal Setup
 #  Auto-configures Google Debian Cloud Shell
-#  Creates a REAL Linux user "Spydomain" and adds details
+#  Creates a REAL Linux user "Spydomain" and injects data
+#  NOTE: Google Cloud Shell has passwordless sudo
 # ═══════════════════════════════════════════════════════
-
-set -e
 
 # Colors
 G='\033[0;32m'; C='\033[0;36m'; Y='\033[1;33m'; R='\033[0;31m'; B='\033[1m'; N='\033[0m'
 
-{
 clear
 echo -e "${G}${B}"
 echo "  ╔═══════════════════════════════════════════════════════╗"
@@ -23,20 +21,17 @@ echo -e "${C}[1/4]${N} Creating isolated Debian Linux user 'Spydomain'..."
 if id "Spydomain" &>/dev/null; then
     echo -e "  ${Y}→${N} User Spydomain already exists. Refreshing profile..."
 else
-    # Create the user with a home directory and bash as the default shell
-    sudo useradd -m -s /bin/bash Spydomain
+    sudo useradd -m -s /bin/bash Spydomain 2>/dev/null
     echo -e "  ${G}→${N} User Spydomain created successfully."
 fi
 
 # Ensure correct home directory ownership
-sudo chown -R Spydomain:Spydomain /home/Spydomain
+sudo chown -R Spydomain:Spydomain /home/Spydomain 2>/dev/null
 
 echo -e "${C}[2/4]${N} Generating portfolio data..."
 
 # ── Execute File Generation AS the Spydomain user ──
 sudo -u Spydomain bash << 'SPYSETUP'
-set -e
-G='\033[0;32m'; Y='\033[1;33m'; R='\033[0;31m'; N='\033[0m'
 SPYDIR="/home/Spydomain"
 cd "$SPYDIR"
 mkdir -p projects certs tools docs .config
@@ -149,33 +144,30 @@ cat > .secret << 'EOF'
 Keep learning, keep hacking (ethically)! 🛡️
 EOF
 
-# 2. GIT CLONING DISABLED PER USER REQUEST
-# Repositories are not automatically cloned.
-
 # 3. CREATE BASHRC FOR SPYDOMAIN
 cat > .bashrc << 'BASHRC'
 # ═══ Spydomain Terminal Config ═══
-export PS1='\[\033[01;32m\]Spydomain@debian\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+export PS1='\[\033[01;32m\]Spydomain@cloudshell\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
-# Aliases
-alias ll='ls -la --color=auto'
-alias la='ls -A --color=auto'
-alias l='ls -CF --color=auto'
-alias cls='clear'
-alias myabout='cat ~/about.txt'
-alias myinfo='cat ~/whoami.txt'
-alias myskills='cat ~/skills.txt'
-alias myedu='cat ~/education.txt'
-alias myprojects='ls -l ~/projects/'
-alias mycerts='cat ~/certs/certifications.txt'
-alias mycontact='cat ~/contact.txt'
+# Custom Commands
+ll() { ls -la --color=auto "$@"; }
+la() { ls -A --color=auto "$@"; }
+l() { ls -CF --color=auto "$@"; }
+cls() { clear; }
+myabout() { cat ~/about.txt; }
+myinfo() { cat ~/whoami.txt; }
+myskills() { cat ~/skills.txt; }
+myedu() { cat ~/education.txt; }
+myprojects() { ls -l ~/projects/; }
+mycerts() { cat ~/certs/certifications.txt; }
+mycontact() { cat ~/contact.txt; }
 
 neofetch_spy() {
     echo ""
-    echo -e "\033[0;32m       ▄▄▄▄▄▄▄▄▄▄▄       \033[1;37mSpydomain@debian"
+    echo -e "\033[0;32m       ▄▄▄▄▄▄▄▄▄▄▄       \033[1;37mSpydomain@cloudshell"
     echo -e "\033[0;32m   ▄▀░░░░░░░░░░░░░▀▄     \033[0;32m─────────────────"
     echo -e "\033[0;32m  █░░░░░░░░░░░░░░░░░█    \033[1;37mOS:\033[0m Debian GNU/Linux (Google Cloud Shell)"
-    echo -e "\033[0;32m █░░░░░░░░░░░░░░░░░░░█   \033[1;37mUser:\033[0m $(whoami)"
+    echo -e "\033[0;32m █░░░░░░░░░░░░░░░░░░░█   \033[1;37mUser:\033[0m Spydomain"
     echo -e "\033[0;32m █░░▄▀▀▀▀▀▀▀▀▄░░░░░░░█   \033[1;37mKernel:\033[0m $(uname -r)"
     echo -e "\033[0;32m █░█  🔒  🛡️  █░░░░░░█   \033[1;37mUptime:\033[0m $(uptime -p 2>/dev/null || echo 'N/A')"
     echo -e "\033[0;32m █░█         █░░░░░░░█   \033[1;37mShell:\033[0m $SHELL"
@@ -234,8 +226,7 @@ echo -e "  ║  Type 'help_spy' for available commands                ║"
 echo -e "  ╚═══════════════════════════════════════════════════════╝${N}"
 echo ""
 echo -e "${C}[4/4]${N} Dropping you into the Spydomain shell..."
-} > /dev/null 2>&1
 
 # 4. LAUNCH AS SPYDOMAIN
-# Switch user permanently replacing current process shell with the new login shell for 'Spydomain'
+# Switch user permanently — exec replaces the current shell process
 exec sudo -u Spydomain -i

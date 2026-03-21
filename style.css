@@ -1078,6 +1078,39 @@ body.menu-open .page-container {
 .cloud-launch-btn:active {
   transform: translateY(-1px);
 }
+.cloud-launch-btn.is-running {
+  background: linear-gradient(135deg, #00cc88, #009966);
+  pointer-events: auto;
+  cursor: default;
+  animation: runningPulse 2s ease-in-out infinite;
+}
+.cloud-launch-btn.is-running:hover {
+  transform: none;
+}
+@keyframes runningPulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(0,255,153,0.3); }
+  50% { box-shadow: 0 4px 30px rgba(0,255,153,0.6); }
+}
+.cloud-shell-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-left: 10px;
+  background: rgba(0,0,0,0.25);
+  border-radius: 50%;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+.cloud-shell-close:hover {
+  background: rgba(0,0,0,0.5);
+  transform: scale(1.2);
+}
 
 .btn-glow {
   position: absolute;

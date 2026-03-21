@@ -28,14 +28,84 @@ document.addEventListener('DOMContentLoaded', () => {
 function initCloudShellLaunch() {
   const btn = document.getElementById('cloud-shell-btn');
   if (!btn) return;
+
+  const originalHTML = btn.innerHTML;
+  const runningHTML = `<i class="fas fa-circle-notch fa-spin"></i> Terminal is running... <span class="cloud-shell-close" title="Dismiss">&times;</span>`;
+  let shellWin = null;
+  let pollTimer = null;
+
+  function setRunning() {
+    btn.innerHTML = runningHTML;
+    btn.classList.add('is-running');
+    localStorage.setItem('cloudShellRunning', 'true');
+    // Manual dismiss X
+    const closeBtn = btn.querySelector('.cloud-shell-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        resetBtn();
+      });
+    }
+  }
+
+  function resetBtn() {
+    btn.innerHTML = originalHTML;
+    btn.classList.remove('is-running');
+    localStorage.removeItem('cloudShellRunning');
+    if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    shellWin = null;
+  }
+
+  function startPolling(win) {
+    // Wait 5 seconds for Google redirect to settle before polling win.closed
+    setTimeout(() => {
+      pollTimer = setInterval(() => {
+        try {
+          if (win.closed) {
+            resetBtn();
+          }
+        } catch (e) {
+          // Cross-origin — can't check, keep running state
+        }
+      }, 1500);
+    }, 5000);
+  }
+
+  // On page focus, check if the popup is still open
+  window.addEventListener('focus', () => {
+    if (!btn.classList.contains('is-running')) return;
+    if (shellWin) {
+      try {
+        if (shellWin.closed) {
+          resetBtn();
+        }
+      } catch (e) {
+        // Cross-origin, can't check
+      }
+    }
+  });
+
+  // Recover state on reload (auto-reset after 3 minutes if no popup ref)
+  if (localStorage.getItem('cloudShellRunning') === 'true') {
+    setRunning();
+    setTimeout(() => {
+      if (btn.classList.contains('is-running') && !shellWin) {
+        resetBtn();
+      }
+    }, 180000);
+  }
+
   btn.addEventListener('click', e => {
     e.preventDefault();
-    // Execute base64 directly in the shell to hide the URL entirely from the address bar
-    // Payload changed to download and run, not 'curl | bash', to preserve TTY for the generated shell
-    const payload = 'Y3VybCAtc0wgaHR0cHM6Ly93d3cuYmlrYXNoa3VtYXJzYXJyYWYuY29tLm5wL3NldHVwLXRlcm1pbmFsLnNoIC1vIC90bXAvcyAmJiBiYXNoIC90bXAvcw==';
-    const shellCmd = `echo ${payload} | base64 -d > /tmp/sp && bash /tmp/sp`;
+    if (btn.classList.contains('is-running')) return;
+
+    const payload = 'Y3VybCAtc0wgaHR0cHM6Ly93d3cuYmlrYXNoa3VtYXJzYXJyYWYuY29tLm5wL3NldHVwLXRlcm1pbmFsLnNoIC1vIC90bXAvcyAmJiBzb3VyY2UgL3RtcC9z';
+    const shellCmd = `clear; echo ${payload} | base64 -d > /tmp/sp && source /tmp/sp`;
     const url = `https://shell.cloud.google.com/cloudshell/open?shellcmd=${encodeURIComponent(shellCmd)}&show=terminal`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+    shellWin = window.open(url, 'CloudShell', 'width=900,height=600,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes');
+    setRunning();
+    if (shellWin) startPolling(shellWin);
   });
 }
 
